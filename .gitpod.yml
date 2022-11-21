@@ -1,0 +1,13 @@
+image:
+  file: .gitpod.Dockerfile 
+#tasks:
+  #- name: create docker network
+    #command: |
+      #docker network create {{ project name }}-mysql  #creates a mySQL database
+      #docker container run --name {{ database container name}} --network {{ project name }}-mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE={{ database name }} -v {{ volume name }}:/workspace/{{ project name }}/files -d mysql
+      #mvn install -DskipTests
+      #docker image build -t {{ project name }}-jdbc .
+      #docker container run --network {{ project name }}-mysql --name {{ project name }}-jdbc-container -p 8080:8080 -v /workspace/{{ project name }}/files:/workspace/{{ project name }}/files -d {{ project name }}-jdbc
+vscode:
+  extensions:
+    - vscjava.vscode-java-pack"
