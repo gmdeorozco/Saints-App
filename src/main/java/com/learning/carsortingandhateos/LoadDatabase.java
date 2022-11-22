@@ -15,6 +15,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.learning.carsortingandhateos.controller.ReligiousOrderController;
 import com.learning.carsortingandhateos.entities.ReligiousOrderEntity;
 import com.learning.carsortingandhateos.entities.SaintEntity;
 import com.learning.carsortingandhateos.repository.ReligiousOrderRepository;
@@ -48,6 +49,7 @@ public class LoadDatabase {
                         
                         log.info("Preloading... " + religiousOrderService.saveReligiousOrderEntity( jesuitOrder ) );
 
+                        /*
                         SaintEntity loyolaIgnatius = 
                             SaintEntity.builder()
                                 .saintIsApostle(false)
@@ -58,20 +60,8 @@ public class LoadDatabase {
                                 .orderFoundedBySaint( jesuitOrder )
                                 .build();
 
-                        log.info("Preloading..." + saintsEntityService.saveSaintEntity( loyolaIgnatius ));
+                        log.info("Preloading..." + saintsEntityService.saveSaintEntity( loyolaIgnatius ));*/
 
-                        
-
-                        CriteriaBuilder cb = em.getCriteriaBuilder();
-                        CriteriaQuery<ReligiousOrderEntity> query = cb.createQuery( ReligiousOrderEntity.class );
-                        Root<ReligiousOrderEntity> root = query.from(ReligiousOrderEntity.class);
-                        query.select(root);
-                        root.fetch("saintsOnOrder");
-                        //root.fetch("orderFounder");
-
-                        query.where(cb.equal(root.get("id"), 1L));
-
-                        log.info("with criteria builder " + em.createQuery(query).getSingleResult().toString());
 
                     };
 

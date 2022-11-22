@@ -1,5 +1,6 @@
 package com.learning.carsortingandhateos.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,5 +20,9 @@ public class ReligiousOrderService {
 
     public ReligiousOrderEntity saveReligiousOrderEntity( ReligiousOrderEntity religiousOrderEntity){
         return religiousOrderRepository.save(religiousOrderEntity);
+    }
+
+    public List<ReligiousOrderEntity> getAllReligiousOrderEntities(){
+        return (List<ReligiousOrderEntity>) religiousOrderRepository.findAll();
     }
 }

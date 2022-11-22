@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,10 +31,12 @@ public class ReligiousOrderEntity implements Serializable{
     private String religiousOrderName;
     private LocalDate religiousOrderFoundationDate;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "saintReligiousOrder")
     private List<SaintEntity> saintsOnOrder;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToOne
     @JoinColumn(name = "orderFounderId", referencedColumnName = "id")
     private SaintEntity orderFounder;
 }
