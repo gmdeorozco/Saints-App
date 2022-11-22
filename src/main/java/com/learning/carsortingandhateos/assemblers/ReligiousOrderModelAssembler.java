@@ -33,6 +33,8 @@ public class ReligiousOrderModelAssembler
                 methodOn(WebController.class)
                 .getReligiousOrderById(entity.getId()))
                 .withSelfRel());
+        
+            System.out.println("11111111111111111");
 
             religiousOrderModel.setId( entity.getId());
             religiousOrderModel.setOrderFounder( toSaintModel( entity.getOrderFounder() ) );

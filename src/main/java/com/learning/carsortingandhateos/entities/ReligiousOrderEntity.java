@@ -31,11 +31,11 @@ public class ReligiousOrderEntity implements Serializable{
     private String religiousOrderName;
     private LocalDate religiousOrderFoundationDate;
 
-    @JsonIgnore
+   // @JsonIgnore
     @OneToMany(mappedBy = "saintReligiousOrder")
     private List<SaintEntity> saintsOnOrder;
 
-    @JsonIgnore
+   // @JsonIgnore
     @OneToOne
     @JoinColumn(name = "orderFounderId", referencedColumnName = "id")
     private SaintEntity orderFounder;

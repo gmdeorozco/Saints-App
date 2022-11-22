@@ -20,6 +20,7 @@ import com.learning.carsortingandhateos.entities.ReligiousOrderEntity;
 import com.learning.carsortingandhateos.entities.SaintEntity;
 import com.learning.carsortingandhateos.model.ReligiousOrderModel;
 import com.learning.carsortingandhateos.model.SaintModel;
+import com.learning.carsortingandhateos.repository.SaintsRepository;
 import com.learning.carsortingandhateos.services.ReligiousOrderService;
 import com.learning.carsortingandhateos.services.SaintsEntityService;
 
@@ -50,6 +51,7 @@ public class WebController {
 				.orElse(ResponseEntity.notFound().build());
 	}
 
+    @GetMapping("/api/orders/{id}")
     public ResponseEntity<ReligiousOrderModel> getReligiousOrderById(@PathVariable("id") Long id) {
         return religiousOrderService.getById(id)
             .map(religiousOrderModelAssembler::toModel)
@@ -58,9 +60,7 @@ public class WebController {
         
     }
 
-    public Class<?> getAllSaints() {
-        return null;
-    }
+  
 
     @GetMapping("/api/saints-list")
 	public ResponseEntity<CollectionModel<SaintModel>> getAllSaints(Pageable pageable) 
@@ -72,9 +72,6 @@ public class WebController {
                 HttpStatus.OK);
 	}
 
-    public Class<?> getAllOrders() {
-        return null;
-    }
 
     @GetMapping("/api/orders-list")
 	public ResponseEntity<PagedModel<ReligiousOrderModel>> getAllOrders(Pageable pageable) 
@@ -85,5 +82,28 @@ public class WebController {
 							.toModel(orderEntities, religiousOrderModelAssembler );
 		
 		return new ResponseEntity<>(collModel,HttpStatus.OK);
+	}
+
+    
+    @GetMapping("/api/orders")
+	public ResponseEntity<CollectionModel<ReligiousOrderModel>> getAllOrders() 
+	{
+		List<ReligiousOrderEntity> orderEntities = (List<ReligiousOrderEntity>) religiousOrderService
+                    .getAllReligiousOrderEntities();
+		
+		return new ResponseEntity<>(
+				religiousOrderModelAssembler.toCollectionModel(orderEntities), 
+				HttpStatus.OK);
+	}
+
+   
+    @GetMapping("/api/saints")
+	public ResponseEntity<CollectionModel<SaintModel>> getAllSaints() 
+	{
+		List<SaintEntity> actorEntities = (List<SaintEntity>) saintsEntityService.getAllSaintEntities();
+		
+		return new ResponseEntity<>(
+				saintModelAssembler.toCollectionModel(actorEntities), 
+				HttpStatus.OK);
 	}
 }

@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Relation(collectionRelation = "saintsOnOrder", itemRelation = "saintOnOrder")
+//@Relation(collectionRelation = "saintsOnOrder", itemRelation = "saintOnOrder")
 @JsonInclude(Include.NON_NULL)
 
 public class ReligiousOrderModel extends RepresentationModel < ReligiousOrderModel >{
