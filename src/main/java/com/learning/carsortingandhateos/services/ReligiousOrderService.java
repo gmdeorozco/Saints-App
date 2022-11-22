@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.learning.carsortingandhateos.entities.ReligiousOrderEntity;
@@ -24,5 +26,9 @@ public class ReligiousOrderService {
 
     public List<ReligiousOrderEntity> getAllReligiousOrderEntities(){
         return (List<ReligiousOrderEntity>) religiousOrderRepository.findAll();
+    }
+
+    public Page<ReligiousOrderEntity> getAllReligiousOrderEntities(Pageable pageable) {
+        return religiousOrderRepository.findAll(pageable);
     }
 }

@@ -29,11 +29,11 @@ public class SaintEntity implements Serializable {
     private boolean saintIsApostle;
 
     @ManyToOne
-    //@JsonIgnore
+    @JsonIgnore
     private ReligiousOrderEntity saintReligiousOrder;
 
     @OneToOne(mappedBy = "orderFounder")
-    //@JsonIgnore
+    @JsonIgnore
     private ReligiousOrderEntity orderFoundedBySaint;
 
 }
