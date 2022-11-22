@@ -1,9 +1,9 @@
 package com.learning.carsortingandhateos.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.learning.carsortingandhateos.entities.ReligiousOrderEntity;
 
-public interface ReligiousOrderRepository extends JpaRepository< ReligiousOrderEntity, Long >{
+public interface ReligiousOrderRepository extends PagingAndSortingRepository < ReligiousOrderEntity, Long >{
 
 }
