@@ -1,10 +1,10 @@
-package com.learning.carsortingandhateos.model;
+package com.saintsapp.saintsserver.model;
 
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.learning.carsortingandhateos.entities.ReligiousOrderEntity;
+import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.AllArgsConstructor;

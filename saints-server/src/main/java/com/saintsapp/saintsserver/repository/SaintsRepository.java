@@ -1,8 +1,8 @@
-package com.learning.carsortingandhateos.repository;
+package com.saintsapp.saintsserver.repository;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.learning.carsortingandhateos.entities.SaintEntity;
+import com.saintsapp.saintsserver.entities.SaintEntity;
 
 public interface SaintsRepository extends PagingAndSortingRepository <SaintEntity, Long> {
     

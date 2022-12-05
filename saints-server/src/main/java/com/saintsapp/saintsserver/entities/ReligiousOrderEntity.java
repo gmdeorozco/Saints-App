@@ -1,4 +1,4 @@
-package com.learning.carsortingandhateos.entities;
+package com.saintsapp.saintsserver.entities;
 
 import java.io.Serializable;
 import java.time.LocalDate;

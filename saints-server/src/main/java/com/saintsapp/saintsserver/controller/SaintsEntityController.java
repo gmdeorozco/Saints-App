@@ -1,4 +1,4 @@
-package com.learning.carsortingandhateos.controller;
+package com.saintsapp.saintsserver.controller;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.learning.carsortingandhateos.entities.ReligiousOrderEntity;
-import com.learning.carsortingandhateos.entities.SaintEntity;
-import com.learning.carsortingandhateos.services.ReligiousOrderService;
-import com.learning.carsortingandhateos.services.SaintsEntityService;
+import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
+import com.saintsapp.saintsserver.entities.SaintEntity;
+import com.saintsapp.saintsserver.services.ReligiousOrderService;
+import com.saintsapp.saintsserver.services.SaintsEntityService;
 
 @RestController
 public class SaintsEntityController {

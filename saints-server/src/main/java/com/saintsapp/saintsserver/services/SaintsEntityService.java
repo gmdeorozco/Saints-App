@@ -1,4 +1,4 @@
-package com.learning.carsortingandhateos.services;
+package com.saintsapp.saintsserver.services;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.learning.carsortingandhateos.entities.SaintEntity;
-import com.learning.carsortingandhateos.repository.SaintsRepository;
+import com.saintsapp.saintsserver.entities.SaintEntity;
+import com.saintsapp.saintsserver.repository.SaintsRepository;
 
 @Service
 public class SaintsEntityService {

@@ -1,13 +1,13 @@
-package com.learning.carsortingandhateos.assemblers;
+package com.saintsapp.saintsserver.assemblers;
 
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
-import com.learning.carsortingandhateos.controller.WebController;
-import com.learning.carsortingandhateos.entities.ReligiousOrderEntity;
-import com.learning.carsortingandhateos.entities.SaintEntity;
-import com.learning.carsortingandhateos.model.ReligiousOrderModel;
-import com.learning.carsortingandhateos.model.SaintModel;
+import com.saintsapp.saintsserver.controller.WebController;
+import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
+import com.saintsapp.saintsserver.entities.SaintEntity;
+import com.saintsapp.saintsserver.model.ReligiousOrderModel;
+import com.saintsapp.saintsserver.model.SaintModel;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;

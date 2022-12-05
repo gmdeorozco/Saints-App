@@ -1,8 +1,8 @@
-package com.learning.carsortingandhateos.repository;
+package com.saintsapp.saintsserver.repository;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.learning.carsortingandhateos.entities.ReligiousOrderEntity;
+import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
 
 public interface ReligiousOrderRepository extends PagingAndSortingRepository < ReligiousOrderEntity, Long >{
 

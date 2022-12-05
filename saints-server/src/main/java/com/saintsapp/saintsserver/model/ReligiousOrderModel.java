@@ -1,4 +1,4 @@
-package com.learning.carsortingandhateos.model;
+package ccom.saintsapp.saintsserver.model;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -7,7 +7,7 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.learning.carsortingandhateos.entities.SaintEntity;
+import ccom.saintsapp.saintsserver.entities.SaintEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

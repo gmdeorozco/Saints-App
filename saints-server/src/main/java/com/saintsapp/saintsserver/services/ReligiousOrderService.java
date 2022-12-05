@@ -1,4 +1,4 @@
-package com.learning.carsortingandhateos.services;
+package com.saintsapp.saintsserver.services;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,8 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.learning.carsortingandhateos.entities.ReligiousOrderEntity;
-import com.learning.carsortingandhateos.repository.ReligiousOrderRepository;
+import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
+import com.saintsapp.saintsserver.repository.ReligiousOrderRepository;
 
 @Service
 public class ReligiousOrderService {

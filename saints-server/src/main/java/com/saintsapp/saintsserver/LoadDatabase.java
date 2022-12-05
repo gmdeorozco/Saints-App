@@ -1,4 +1,4 @@
-package com.learning.carsortingandhateos;
+package com.saintsapp.saintsserver;
 
 import java.time.LocalDate;
 
@@ -15,13 +15,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.learning.carsortingandhateos.controller.ReligiousOrderController;
-import com.learning.carsortingandhateos.entities.ReligiousOrderEntity;
-import com.learning.carsortingandhateos.entities.SaintEntity;
-import com.learning.carsortingandhateos.repository.ReligiousOrderRepository;
-import com.learning.carsortingandhateos.repository.SaintsRepository;
-import com.learning.carsortingandhateos.services.ReligiousOrderService;
-import com.learning.carsortingandhateos.services.SaintsEntityService;
+import com.saintsapp.saintsserver.controller.ReligiousOrderController;
+import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
+import com.saintsapp.saintsserver.entities.SaintEntity;
+import com.saintsapp.saintsserver.repository.ReligiousOrderRepository;
+import com.saintsapp.saintsserver.repository.SaintsRepository;
+import com.saintsapp.saintsserver.services.ReligiousOrderService;
+import com.saintsapp.saintsserver.services.SaintsEntityService;
 
 @Configuration
 public class LoadDatabase {

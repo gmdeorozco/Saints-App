@@ -1,4 +1,4 @@
-package com.learning.carsortingandhateos.entities;
+package com.saintsapp.saintsserver.entities;
 
 import java.io.Serializable;
 
@@ -15,9 +15,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
 @Entity @Data @AllArgsConstructor @Builder @NoArgsConstructor
 @ToString(exclude = {"saintReligiousOrder","orderFoundedBySaint"})
-
 public class SaintEntity implements Serializable {
     
     @Id @GeneratedValue

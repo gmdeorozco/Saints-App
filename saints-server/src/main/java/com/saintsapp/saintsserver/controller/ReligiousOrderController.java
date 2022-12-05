@@ -1,4 +1,4 @@
-package com.learning.carsortingandhateos.controller;
+package com.saintsapp.saintsserver.controller;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.learning.carsortingandhateos.entities.ReligiousOrderEntity;
-import com.learning.carsortingandhateos.services.ReligiousOrderService;
+import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
+import com.saintsapp.saintsserver.services.ReligiousOrderService;
 
 @RestController
 public class ReligiousOrderController {

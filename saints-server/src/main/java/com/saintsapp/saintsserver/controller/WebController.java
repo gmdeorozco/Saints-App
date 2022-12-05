@@ -1,4 +1,4 @@
-package com.learning.carsortingandhateos.controller;
+package com.saintsapp.saintsserver.controller;
 
 import java.util.List;
 
@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.learning.carsortingandhateos.assemblers.ReligiousOrderModelAssembler;
-import com.learning.carsortingandhateos.assemblers.SaintModelAssembler;
-import com.learning.carsortingandhateos.entities.ReligiousOrderEntity;
-import com.learning.carsortingandhateos.entities.SaintEntity;
-import com.learning.carsortingandhateos.model.ReligiousOrderModel;
-import com.learning.carsortingandhateos.model.SaintModel;
-import com.learning.carsortingandhateos.repository.SaintsRepository;
-import com.learning.carsortingandhateos.services.ReligiousOrderService;
-import com.learning.carsortingandhateos.services.SaintsEntityService;
+import com.saintsapp.saintsserver.assemblers.ReligiousOrderModelAssembler;
+import com.saintsapp.saintsserver.assemblers.SaintModelAssembler;
+import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
+import com.saintsapp.saintsserver.entities.SaintEntity;
+import com.saintsapp.saintsserver.model.ReligiousOrderModel;
+import com.saintsapp.saintsserver.model.SaintModel;
+import com.saintsapp.saintsserver.repository.SaintsRepository;
+import com.saintsapp.saintsserver.services.ReligiousOrderService;
+import com.saintsapp.saintsserver.services.SaintsEntityService;
 
 @RestController
 public class WebController {
