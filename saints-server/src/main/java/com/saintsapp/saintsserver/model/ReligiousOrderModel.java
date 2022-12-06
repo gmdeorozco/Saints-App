@@ -1,4 +1,4 @@
-package ccom.saintsapp.saintsserver.model;
+package com.saintsapp.saintsserver.model;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -7,7 +7,7 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import ccom.saintsapp.saintsserver.entities.SaintEntity;
+import com.saintsapp.saintsserver.entities.SaintEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

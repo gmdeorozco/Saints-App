@@ -11,7 +11,7 @@ import com.saintsapp.saintsserver.entities.SaintEntity;
 import com.saintsapp.saintsserver.repository.SaintsRepository;
 
 @Service
-public class SaintsEntityService {
+public class SaintsService {
     @Autowired
     SaintsRepository saintsRepository;
 

@@ -3,7 +3,8 @@ package com.saintsapp.saintsserver.assemblers;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
-import com.saintsapp.saintsserver.controller.WebController;
+import com.saintsapp.saintsserver.controller.ReligiousOrderController;
+import com.saintsapp.saintsserver.controller.SaintsController;
 import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
 import com.saintsapp.saintsserver.entities.SaintEntity;
 import com.saintsapp.saintsserver.model.ReligiousOrderModel;
@@ -19,7 +20,7 @@ public class SaintModelAssembler
     extends RepresentationModelAssemblerSupport< SaintEntity, SaintModel>{
     
     public SaintModelAssembler(){
-        super(WebController.class , SaintModel.class );
+        super(SaintsController.class , SaintModel.class );
     }
 
     @Override
@@ -28,7 +29,7 @@ public class SaintModelAssembler
         SaintModel saintModel = instantiateModel(entity);
         
         saintModel.add( linkTo(
-            methodOn(WebController.class )
+            methodOn(SaintsController.class )
                 .getSaintById( entity.getId()))
             .withSelfRel());
 
@@ -46,7 +47,7 @@ public class SaintModelAssembler
 	{
 		CollectionModel<SaintModel> saintModels = super.toCollectionModel(entities);
 		
-		saintModels.add(linkTo(methodOn(WebController.class).getAllSaints()).withSelfRel());
+		saintModels.add(linkTo(methodOn(SaintsController.class).getAllSaints()).withSelfRel());
 		
 		return saintModels;
 	}
@@ -62,7 +63,7 @@ public class SaintModelAssembler
             .religiousOrderName(religiousOrderEntity.getReligiousOrderName())
             .build()
                 .add( linkTo(
-                    methodOn( WebController.class)
+                    methodOn( ReligiousOrderController.class)
                     .getReligiousOrderById( religiousOrderEntity.getId()))
                     .withSelfRel());   
             

@@ -11,7 +11,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.hateoas.CollectionModel;
 
-import com.saintsapp.saintsserver.controller.WebController;
+import com.saintsapp.saintsserver.controller.ReligiousOrderController;
+import com.saintsapp.saintsserver.controller.SaintsController;
 import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
 import com.saintsapp.saintsserver.entities.SaintEntity;
 import com.saintsapp.saintsserver.model.ReligiousOrderModel;
@@ -22,7 +23,7 @@ public class ReligiousOrderModelAssembler
     extends RepresentationModelAssemblerSupport<ReligiousOrderEntity, ReligiousOrderModel>{
 
         public ReligiousOrderModelAssembler() {
-            super(WebController.class, ReligiousOrderModel.class);
+            super(ReligiousOrderController.class, ReligiousOrderModel.class);
         }
 
         @Override
@@ -30,11 +31,11 @@ public class ReligiousOrderModelAssembler
             ReligiousOrderModel religiousOrderModel = instantiateModel(entity);
 
             religiousOrderModel.add( linkTo(
-                methodOn(WebController.class)
+                methodOn(ReligiousOrderController.class)
                 .getReligiousOrderById(entity.getId()))
                 .withSelfRel());
         
-            System.out.println("11111111111111111");
+           
 
             religiousOrderModel.setId( entity.getId());
             religiousOrderModel.setOrderFounder( toSaintModel( entity.getOrderFounder() ) );
@@ -50,7 +51,7 @@ public class ReligiousOrderModelAssembler
 	    {
 		    CollectionModel<ReligiousOrderModel> orderModels = super.toCollectionModel(entities);
 		
-		    orderModels.add(linkTo(methodOn(WebController.class).getAllOrders()).withSelfRel());
+		    orderModels.add(linkTo(methodOn(ReligiousOrderController.class).getAllOrders()).withSelfRel());
 		
 		    return orderModels;
 	    }
@@ -68,7 +69,7 @@ public class ReligiousOrderModelAssembler
                             .saintQuote(saint.getSaintQuote())
                             .build()
                             .add(linkTo(
-                                    methodOn(WebController.class)
+                                    methodOn(SaintsController.class)
                                     .getSaintById(saint.getId()))
                                     .withSelfRel()))
                     .collect(Collectors.toList());
@@ -86,7 +87,7 @@ public class ReligiousOrderModelAssembler
                             .saintQuote(saint.getSaintQuote())
                             .build()
                             .add(linkTo(
-                                    methodOn(WebController.class)
+                                    methodOn(SaintsController.class)
                                     .getSaintById(saint.getId()))
                                     .withSelfRel());
         }

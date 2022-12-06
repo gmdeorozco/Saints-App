@@ -2,12 +2,7 @@ package com.saintsapp.saintsserver;
 
 import java.time.LocalDate;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
+import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,20 +10,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.saintsapp.saintsserver.controller.ReligiousOrderController;
 import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
 import com.saintsapp.saintsserver.entities.SaintEntity;
-import com.saintsapp.saintsserver.repository.ReligiousOrderRepository;
-import com.saintsapp.saintsserver.repository.SaintsRepository;
 import com.saintsapp.saintsserver.services.ReligiousOrderService;
-import com.saintsapp.saintsserver.services.SaintsEntityService;
+import com.saintsapp.saintsserver.services.SaintsService;
 
 @Configuration
 public class LoadDatabase {
     private static final Logger log = LoggerFactory.getLogger( LoadDatabase.class );
 
     @Autowired
-    SaintsEntityService saintsEntityService;
+    SaintsService saintsEntityService;
 
     @Autowired
     ReligiousOrderService religiousOrderService;
@@ -49,7 +41,7 @@ public class LoadDatabase {
                         
                         log.info("Preloading... " + religiousOrderService.saveReligiousOrderEntity( jesuitOrder ) );
 
-                        /*
+                        
                         SaintEntity loyolaIgnatius = 
                             SaintEntity.builder()
                                 .saintIsApostle(false)
@@ -60,7 +52,7 @@ public class LoadDatabase {
                                 .orderFoundedBySaint( jesuitOrder )
                                 .build();
 
-                        log.info("Preloading..." + saintsEntityService.saveSaintEntity( loyolaIgnatius ));*/
+                        log.info("Preloading..." + saintsEntityService.saveSaintEntity( loyolaIgnatius ));
 
 
                     };
