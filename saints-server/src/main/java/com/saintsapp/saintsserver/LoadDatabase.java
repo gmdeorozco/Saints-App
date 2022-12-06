@@ -31,7 +31,7 @@ public class LoadDatabase {
     @Bean
     CommandLineRunner iniDatabase(){
 
-                    return args -> {
+                    return args -> {/*
 
                         ReligiousOrderEntity jesuitOrder = 
                             ReligiousOrderEntity.builder()
@@ -54,7 +54,7 @@ public class LoadDatabase {
 
                         log.info("Preloading..." + saintsEntityService.saveSaintEntity( loyolaIgnatius ));
 
-
+ */
                     };
 
     }

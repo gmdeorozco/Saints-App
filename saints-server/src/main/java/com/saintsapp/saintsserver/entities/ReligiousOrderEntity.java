@@ -2,6 +2,7 @@ package com.saintsapp.saintsserver.entities;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -30,7 +31,7 @@ public class ReligiousOrderEntity implements Serializable{
 
    // @JsonIgnore
     @OneToMany(mappedBy = "saintReligiousOrder")
-    private List<SaintEntity> saintsOnOrder;
+    private List<SaintEntity> saintsOnOrder = new ArrayList <SaintEntity>();
 
    // @JsonIgnore
     @OneToOne

@@ -26,4 +26,14 @@ public class SaintsService {
     public List<SaintEntity> getAllSaintEntities(){
         return (List<SaintEntity>) saintsRepository.findAll();
     }
+
+    public Optional<SaintEntity> deleteSaintEntity(Long id){
+        Optional<SaintEntity> opt = saintsRepository.findById(id);
+        opt.ifPresent( saint -> {
+            saint.setOrderFoundedBySaint(null);
+            saint.setSaintReligiousOrder(null);
+        });
+        opt.ifPresent(saintsRepository::delete);
+        return opt;
+    }
 }

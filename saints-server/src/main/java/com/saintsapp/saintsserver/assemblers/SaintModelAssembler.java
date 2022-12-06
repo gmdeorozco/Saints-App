@@ -10,6 +10,8 @@ import com.saintsapp.saintsserver.entities.SaintEntity;
 import com.saintsapp.saintsserver.model.ReligiousOrderModel;
 import com.saintsapp.saintsserver.model.SaintModel;
 
+import jakarta.persistence.Entity;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -32,6 +34,16 @@ public class SaintModelAssembler
             methodOn(SaintsController.class )
                 .getSaintById( entity.getId()))
             .withSelfRel());
+        
+        saintModel.add( linkTo(
+            methodOn(SaintsController.class )
+                .deleteSaintEntity( entity.getId()))
+            .withRel("delete"));
+        
+        saintModel.add( linkTo(
+                methodOn(SaintsController.class )
+                    .updateSaintEntity( entity ))
+                .withRel("update"));
 
         saintModel.setId( entity.getId());
         saintModel.setOrderFoundedBySaint( toReligiousOrderModel(entity.getOrderFoundedBySaint() ));

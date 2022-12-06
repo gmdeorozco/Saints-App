@@ -1,6 +1,7 @@
 package com.saintsapp.saintsserver.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,8 +11,12 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.saintsapp.saintsserver.assemblers.ReligiousOrderModelAssembler;
@@ -34,6 +39,31 @@ public class ReligiousOrderController {
         this.religiousOrderService = religiousOrderService;
     }
 
+    @PostMapping("/api/orders/create")
+    public ResponseEntity<ReligiousOrderModel> createReligiousOrderEntity( @RequestBody ReligiousOrderEntity order){                
+       
+    return new ResponseEntity<ReligiousOrderModel>(
+        religiousOrderModelAssembler.toModel(religiousOrderService.saveReligiousOrderEntity( order )),HttpStatus.CREATED); 
+               
+    }
+
+    @PutMapping("/api/orders/create")
+    public ResponseEntity<ReligiousOrderModel> updateReligiousOrderEntity( @RequestBody ReligiousOrderEntity order){                
+       
+    return new ResponseEntity<ReligiousOrderModel>(
+        religiousOrderModelAssembler.toModel(religiousOrderService.saveReligiousOrderEntity( order )),HttpStatus.CREATED); 
+               
+    }
+
+    @DeleteMapping("/api/orders/{id}/delete")
+    public ResponseEntity<ReligiousOrderModel> deleteReligiousOrderEntity( @PathVariable(value = "id") Long id){             
+        return religiousOrderService.deleteReligiousOrderEntity(id)
+            .map(religiousOrderModelAssembler::toModel)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+        
+    }
+
     @GetMapping("/api/orders/{id}")
     public ResponseEntity<ReligiousOrderModel> getReligiousOrderById(@PathVariable("id") Long id) {
         return religiousOrderService.getById(id)
@@ -42,7 +72,6 @@ public class ReligiousOrderController {
             .orElse(ResponseEntity.notFound().build());
         
     }
-
   
     @GetMapping("/api/orders-list")
 	public ResponseEntity<PagedModel<ReligiousOrderModel>> getAllOrders(Pageable pageable) 
@@ -66,5 +95,7 @@ public class ReligiousOrderController {
 				religiousOrderModelAssembler.toCollectionModel(orderEntities), 
 				HttpStatus.OK);
 	}
+
+    
 
 }

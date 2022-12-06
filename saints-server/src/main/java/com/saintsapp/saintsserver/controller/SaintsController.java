@@ -8,9 +8,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,7 +35,7 @@ ReligiousOrderService religiousOrderService;
 @Autowired
 SaintModelAssembler saintModelAssembler;
 
-@PostMapping("/saints/{orderId}/{isFounder}")
+@PostMapping("/api/saints/create/{orderId}/{isFounder}")
 public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orderId" ) Long orderId, 
     @PathVariable(value = "isFounder") boolean isFounder, 
     @RequestBody SaintEntity saint){                
@@ -52,6 +54,23 @@ public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orde
     return new ResponseEntity<SaintModel>(
         saintModelAssembler.toModel(saintsService.saveSaintEntity( saint )),HttpStatus.CREATED); 
                
+    }
+
+    @PutMapping("/api/saints/create")
+    public ResponseEntity<SaintModel> updateSaintEntity( @RequestBody SaintEntity saint ){                
+           
+    return new ResponseEntity<SaintModel>(
+        saintModelAssembler.toModel(saintsService.saveSaintEntity( saint )),HttpStatus.CREATED); 
+               
+    }
+
+    @DeleteMapping("/api/saints/{id}/delete")
+    public ResponseEntity<SaintModel> deleteSaintEntity( @PathVariable(value = "id") Long id){                
+        return saintsService.deleteSaintEntity(id)
+            .map(saintModelAssembler::toModel)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());         
+           
     }
 
     @GetMapping("/api/saints/{id}")

@@ -57,7 +57,7 @@ public class ReligiousOrderModelAssembler
 	    }
 
         private List<SaintModel> toSaintModel(List<SaintEntity> saints) {
-            if (saints.isEmpty())
+            if (saints==null || saints.isEmpty())
                 return Collections.emptyList();
     
             return saints.stream()

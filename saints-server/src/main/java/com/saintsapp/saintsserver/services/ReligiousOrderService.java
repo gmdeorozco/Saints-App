@@ -6,11 +6,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 import org.springframework.stereotype.Service;
 
 import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
 import com.saintsapp.saintsserver.repository.ReligiousOrderPageableRepository;
 import com.saintsapp.saintsserver.repository.ReligiousOrderRepository;
+import com.saintsapp.saintsserver.repository.SaintsRepository;
 
 @Service
 public class ReligiousOrderService {
@@ -19,6 +21,9 @@ public class ReligiousOrderService {
 
     @Autowired
     ReligiousOrderPageableRepository religiousOrderPageableRepository;
+
+    @Autowired
+    SaintsRepository saintsRepository;
 
     public Optional<ReligiousOrderEntity> getById( Long id ){
         return religiousOrderRepository.findById(id);
@@ -35,5 +40,20 @@ public class ReligiousOrderService {
     public Page< ReligiousOrderEntity > getAllReligiousOrderEntities(Pageable pageable) {
         return religiousOrderPageableRepository.findAll( pageable );
       
+    }
+
+    public Optional<ReligiousOrderEntity> deleteReligiousOrderEntity(Long id){
+        Optional<ReligiousOrderEntity> opt = religiousOrderRepository.findById(id);
+        opt.ifPresent( rel -> {
+            rel.setOrderFounder(null);
+            rel.getSaintsOnOrder().stream()
+                .forEach( saint -> {
+                    saint.setSaintReligiousOrder(null);
+                    saintsRepository.save(saint);
+                                    });
+        });
+        opt.ifPresent(religiousOrderRepository::delete);
+        
+        return opt;
     }
 }
