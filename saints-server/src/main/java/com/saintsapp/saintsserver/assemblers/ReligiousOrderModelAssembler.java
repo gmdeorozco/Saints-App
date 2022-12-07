@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 
 import com.saintsapp.saintsserver.controller.ReligiousOrderController;
@@ -26,6 +27,9 @@ public class ReligiousOrderModelAssembler
             super(ReligiousOrderController.class, ReligiousOrderModel.class);
         }
 
+        @Autowired
+        SaintModelAssembler saintModelAssembler;
+
         @Override
         public ReligiousOrderModel toModel( ReligiousOrderEntity entity){
             ReligiousOrderModel religiousOrderModel = instantiateModel(entity);
@@ -37,8 +41,8 @@ public class ReligiousOrderModelAssembler
         
            
 
-            religiousOrderModel.setId( entity.getId());
-            religiousOrderModel.setOrderFounder( toSaintModel( entity.getOrderFounder() ) );
+            religiousOrderModel.setId( entity.getId() );
+            religiousOrderModel.setOrderFounder( entity.getOrderFounder()!=null ? saintModelAssembler.toModel( entity.getOrderFounder() ):null );
             religiousOrderModel.setReligiousOrderFoundationDate( entity.getReligiousOrderFoundationDate());
             religiousOrderModel.setReligiousOrderName( entity.getReligiousOrderName());
             religiousOrderModel.setSaintsOnOrder( toSaintModel(entity.getSaintsOnOrder()));
@@ -56,40 +60,15 @@ public class ReligiousOrderModelAssembler
 		    return orderModels;
 	    }
 
-        private List<SaintModel> toSaintModel(List<SaintEntity> saints) {
-            if (saints==null || saints.isEmpty())
+        private List < SaintModel > toSaintModel( List<SaintEntity> saints ) {
+            if ( saints == null || saints.isEmpty() )
                 return Collections.emptyList();
     
             return saints.stream()
-                    .map(saint -> SaintModel.builder()
-                            .id(saint.getId())
-                            .saintIsApostle(saint.isSaintIsApostle())
-                            .saintName(saint.getSaintName())
-                            .saintPlaceOfBirth(saint.getSaintPlaceOfBirth())
-                            .saintQuote(saint.getSaintQuote())
-                            .build()
-                            .add(linkTo(
-                                    methodOn(SaintsController.class)
-                                    .getSaintById(saint.getId()))
-                                    .withSelfRel()))
-                    .collect(Collectors.toList());
+                    .map( saint -> saintModelAssembler.toModel(saint) )
+                    .collect( Collectors.toList() );
         }
 
-        private SaintModel toSaintModel(SaintEntity saint) {
-            if (saint == null )
-                return null;
-    
-            return SaintModel.builder()
-                            .id(saint.getId())
-                            .saintIsApostle(saint.isSaintIsApostle())
-                            .saintName(saint.getSaintName())
-                            .saintPlaceOfBirth(saint.getSaintPlaceOfBirth())
-                            .saintQuote(saint.getSaintQuote())
-                            .build()
-                            .add(linkTo(
-                                    methodOn(SaintsController.class)
-                                    .getSaintById(saint.getId()))
-                                    .withSelfRel());
-        }
+        
 
 }

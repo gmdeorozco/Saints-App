@@ -10,8 +10,6 @@ import com.saintsapp.saintsserver.entities.SaintEntity;
 import com.saintsapp.saintsserver.model.ReligiousOrderModel;
 import com.saintsapp.saintsserver.model.SaintModel;
 
-import jakarta.persistence.Entity;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -25,6 +23,7 @@ public class SaintModelAssembler
         super(SaintsController.class , SaintModel.class );
     }
 
+  
     @Override
     public SaintModel toModel( SaintEntity entity ){
 
@@ -34,6 +33,11 @@ public class SaintModelAssembler
             methodOn(SaintsController.class )
                 .getSaintById( entity.getId()))
             .withSelfRel());
+
+        saintModel.add( linkTo(
+                methodOn(ReligiousOrderController.class )
+                    .getReligiousOrderById( entity.getSaintReligiousOrder().getId() ))
+                .withRel("saint_religious_order"));
         
         saintModel.add( linkTo(
             methodOn(SaintsController.class )
@@ -44,12 +48,14 @@ public class SaintModelAssembler
                 methodOn(SaintsController.class )
                     .updateSaintEntity( entity ))
                 .withRel("update"));
-
+        
+        
         saintModel.setId( entity.getId());
-        saintModel.setOrderFoundedBySaint( toReligiousOrderModel(entity.getOrderFoundedBySaint() ));
-        saintModel.setSaintIsApostle(entity.isSaintIsApostle());
+        saintModel.setOrderFoundedBySaint( toReligiousOrderModel( entity.getOrderFoundedBySaint() ));
+        saintModel.setSaintIsApostle( entity.isSaintIsApostle() );
         saintModel.setSaintName( entity.getSaintName() );
         saintModel.setSaintPlaceOfBirth( entity.getSaintPlaceOfBirth() );
+        saintModel.setSaintReligiousOrder( toReligiousOrderModel( entity.getSaintReligiousOrder() ));
         
         return saintModel;
     }

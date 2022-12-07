@@ -37,18 +37,33 @@ public class DoCreator {
                                             .saintQuote(null)
                                             .build());
 
+                        HttpEntity<SaintEntity> saintRequest2 = new HttpEntity<>( 
+                                                SaintEntity.builder()
+                                                .saintIsApostle(false)
+                                                .saintName("Ignatius Loyola")
+                                                .saintPlaceOfBirth("Spain")
+                                                .saintQuote("love should be shown more in deeds than in words")
+                                                .build());
+
                         ReligiousOrderEntity order = restTemplate.postForObject(
                             "https://8080-gmdeorozco-saintsapp-n7lvhhts40z.ws-us77.gitpod.io/api/orders/create", 
-                            orderRequest, ReligiousOrderEntity.class 
+                            orderRequest, 
+                            ReligiousOrderEntity.class 
                                                                             );
                             Long orderId = order.getId();
                         SaintEntity saint = restTemplate.postForObject(
-                                    "https://8080-gmdeorozco-saintsapp-n7lvhhts40z.ws-us77.gitpod.io/api/saints/create/"+orderId+"/false", 
-                                    saintRequest, 
-                                    SaintEntity.class);
+                            "https://8080-gmdeorozco-saintsapp-n7lvhhts40z.ws-us77.gitpod.io/api/saints/create/"+orderId+"/false", 
+                            saintRequest, 
+                            SaintEntity.class);
+
+                        SaintEntity saint2 = restTemplate.postForObject(
+                                "https://8080-gmdeorozco-saintsapp-n7lvhhts40z.ws-us77.gitpod.io/api/saints/create/"+orderId+"/true", 
+                                saintRequest2, 
+                                SaintEntity.class);
 
                         
                         System.out.println( saint.toString() );
+                        System.out.println( saint2.toString() );
 
                     };
 
