@@ -1,4 +1,4 @@
-package com.saintsapp.saintsgame.entities;
+package com.saintsapp.saintsgame.eloClases;
 
 import org.springframework.stereotype.Service;
 

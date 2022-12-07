@@ -1,6 +1,4 @@
-package com.saintsapp.saintsgame.entities;
-
-import java.util.List;
+package com.saintsapp.saintsgame.payloadClases;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,9 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Builder @NoArgsConstructor @AllArgsConstructor @Data
-public class QuestionPayload {
+public class AnswerPayload {
     private Long interactionId;
-    private String question;
-    private List<String> answers;
-    
+    private Long userId;
+    private String answer;
 }

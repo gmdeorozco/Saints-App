@@ -2,20 +2,22 @@ package com.saintsapp.saintsgame.services;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.saintsapp.saintsgame.entities.AnswerPayload;
-import com.saintsapp.saintsgame.entities.EloResult;
-import com.saintsapp.saintsgame.entities.QuestionPayload;
-import com.saintsapp.saintsgame.entities.ResultPayload;
+import com.saintsapp.saintsgame.eloClases.EloResult;
 import com.saintsapp.saintsgame.entities.SaintGameTrivia;
 import com.saintsapp.saintsgame.entities.SaintGameTriviaInteraction;
 import com.saintsapp.saintsgame.entities.SaintGameUser;
+import com.saintsapp.saintsgame.payloadClases.AnswerPayload;
+import com.saintsapp.saintsgame.payloadClases.QuestionPayload;
+import com.saintsapp.saintsgame.payloadClases.ResultPayload;
 import com.saintsapp.saintsgame.repository.InteractionRepository;
 import com.saintsapp.saintsgame.repository.TriviaRepository;
 import com.saintsapp.saintsgame.repository.UserRepository;
@@ -33,10 +35,10 @@ public class SaintGameService {
 
         SaintGameTriviaInteraction interaction = interactionRepository.save(SaintGameTriviaInteraction.builder()
             .start( Instant.now() ) 
-            .timeout( Instant.now().plusSeconds( 5 ) )
+            .timeout( Instant.now().plusSeconds( 10 ) )
             .user( user )
-            .trivia(chooseTrivia( user ))
-            .build());   
+            .trivia( chooseTrivia( user ) )
+            .build() );   
             
         interaction.getTrivia().getInteractions().add(interaction);
         triviaRepository.save( interaction.getTrivia() );
@@ -44,6 +46,8 @@ public class SaintGameService {
         return QuestionPayload.builder()
             .interactionId(interaction.getId())
             .question( interaction.getTrivia().getQuestion())
+            .creationInstant( interaction.getStart())
+            .timeOutInstant( interaction.getTimeout())
             .answers( 
                 Stream.concat( 
                             interaction.getTrivia().getRightAnswers().stream()
@@ -59,7 +63,9 @@ public class SaintGameService {
     }
 
 public ResultPayload submitAnswer( AnswerPayload answerPayload){
-        
+    
+    Instant answerTime = Instant.now();
+
     SaintGameTriviaInteraction interaction = 
         interactionRepository.findById(answerPayload.getInteractionId()).get();
     SaintGameUser user =
@@ -69,7 +75,13 @@ public ResultPayload submitAnswer( AnswerPayload answerPayload){
         interaction.getTrivia().getRightAnswers().stream()
             .anyMatch(ans -> ans.getText().equals(answerPayload.getAnswer() ));
 
-    
+    interaction.setAnsweredInstant( answerTime );
+    if( interaction.getTimeout().isBefore( interaction.getAnsweredInstant() ))
+    {
+        answeredRight = false;
+
+    }
+
     RestTemplate restTemplate = new RestTemplate();
 
     EloResult result = 
@@ -99,6 +111,7 @@ public ResultPayload submitAnswer( AnswerPayload answerPayload){
 
             triviaRepository.save( interaction.getTrivia() );
             userRepository.save( user );
+            interactionRepository.save( interaction );
 
     return ResultPayload.builder()
     .answeredRight( answeredRight )
@@ -108,6 +121,9 @@ public ResultPayload submitAnswer( AnswerPayload answerPayload){
     .questionNewElo( Double.parseDouble( result.getPlayer1().getNewElo() ))
     .userNumberOfGames( user.getNumberOfAnswers() )
     .questionNumberOfGames( interaction.getTrivia().getNumberOfTimesAnswered())
+    .latestAnswerTime( interaction.getTimeout() )
+    .actualAnswerTime( answerTime )
+    .answeredOnTime( interaction.getTimeout().isAfter( interaction.getAnsweredInstant() ) )
     .build();
     
     }
@@ -117,5 +133,21 @@ public ResultPayload submitAnswer( AnswerPayload answerPayload){
         List < SaintGameTrivia > trivias = ( List < SaintGameTrivia > ) triviaRepository.findAll();
         int b = ( int )( Math.random() * ( ( count - 1 ) - 0 + 1 ) + 0 );  
         return trivias.get( b );
+    }
+
+    public Optional<SaintGameUser> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public SaintGameTriviaInteraction getquestion2(Long userid) {
+
+        SaintGameUser user = userRepository.findById( userid ).get();
+
+        return interactionRepository.save(SaintGameTriviaInteraction.builder()
+        .start( Instant.now() ) 
+        .timeout( Instant.now().plusSeconds( 10 ) )
+        .user( user )
+        .trivia( chooseTrivia( user ) )
+        .build() ); 
     }
 }

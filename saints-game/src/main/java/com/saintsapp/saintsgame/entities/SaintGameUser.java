@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.saintsapp.saintsgame.View;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,11 +28,14 @@ import lombok.NoArgsConstructor;
 public class SaintGameUser {
 
     @Id @GeneratedValue
+    @JsonView(value = View.UserView.User.class) 
     private Long id;
 
     @Column(unique = true)
+    @JsonView(value = View.UserView.User.class) 
     private String nickName;
 
+   
     private int age;
 
 
@@ -48,12 +53,15 @@ public class SaintGameUser {
         inverseJoinColumns = @JoinColumn(name = "trivia_wrong_id"))
     private List < SaintGameTrivia > triviaAnsweredWrong;
 
-    @JsonIgnore
+   
     @OneToMany(mappedBy="user")
     private List <SaintGameTriviaInteraction> interactions;
 
     @Builder.Default
+    @JsonView(value = View.UserView.User.class) 
     double elo=1500;
+
+    @JsonView(value = View.UserView.User.class) 
     int numberOfAnswers;
 
     

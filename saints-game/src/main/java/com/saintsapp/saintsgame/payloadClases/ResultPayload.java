@@ -1,4 +1,6 @@
-package com.saintsapp.saintsgame.entities;
+package com.saintsapp.saintsgame.payloadClases;
+
+import java.time.Instant;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,4 +17,7 @@ public class ResultPayload {
     private double questionNewElo;
     private int userNumberOfGames;
     private int questionNumberOfGames;
+    private Instant latestAnswerTime;
+    private Instant actualAnswerTime;
+    private boolean answeredOnTime;
 }

@@ -3,6 +3,8 @@ package com.saintsapp.saintsgame.entities;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.saintsapp.saintsgame.View;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,14 +22,15 @@ public class Answer {
     @Id @GeneratedValue
     Long id;
 
+    @JsonView(value = View.UserView.User.class) 
     @Column(unique = true)
     String text;
 
-    @JsonIgnore
+   
     @ManyToMany(mappedBy = "rightAnswers")
     private List<SaintGameTrivia> triviaRight;
 
-    @JsonIgnore
+    
     @ManyToMany(mappedBy = "wrongAnswers")
     private List<SaintGameTrivia> triviaWrong;
 }
