@@ -31,3 +31,5 @@ public class SaintGameTriviaInteraction {
     private Instant answeredInstant;
     
 }
+
+

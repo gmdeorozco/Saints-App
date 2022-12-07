@@ -65,7 +65,7 @@ public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orde
     }
 
     @DeleteMapping("/api/saints/{id}/delete")
-    public ResponseEntity<SaintModel> deleteSaintEntity( @PathVariable(value = "id") Long id){                
+    public ResponseEntity<SaintModel> deleteSaintEntity( @PathVariable(value = "id") Long id ){                
         return saintsService.deleteSaintEntity(id)
             .map(saintModelAssembler::toModel)
             .map(ResponseEntity::ok)
@@ -74,7 +74,7 @@ public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orde
     }
 
     @GetMapping("/api/saints/{id}")
-	public ResponseEntity<SaintModel> getSaintById(@PathVariable("id") Long id) 
+	public ResponseEntity<SaintModel> getSaintById( @PathVariable("id") Long id ) 
 	{
 		return saintsService.getById(id) 
 				.map(saintModelAssembler::toModel) 

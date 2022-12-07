@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,6 +33,7 @@ public class SaintGameUser {
 
     private int age;
 
+
     @ManyToMany
     @JoinTable(
     name = "trivia_right", 
@@ -45,10 +48,12 @@ public class SaintGameUser {
         inverseJoinColumns = @JoinColumn(name = "trivia_wrong_id"))
     private List < SaintGameTrivia > triviaAnsweredWrong;
 
+    @JsonIgnore
     @OneToMany(mappedBy="user")
     private List <SaintGameTriviaInteraction> interactions;
 
-    double elo;
+    @Builder.Default
+    double elo=1500;
     int numberOfAnswers;
 
     

@@ -35,8 +35,8 @@ public class SaintGameTrivia {
     inverseJoinColumns = @JoinColumn(name = "right_ans_id"))
     private List <Answer> rightAnswers;
     
-    
-    double elo;
+    @Builder.Default
+    double elo=1500;
     int numberOfTimesAnswered;
 
     
