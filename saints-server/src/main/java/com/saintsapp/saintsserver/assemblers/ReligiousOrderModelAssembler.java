@@ -46,6 +46,7 @@ public class ReligiousOrderModelAssembler
             religiousOrderModel.setReligiousOrderFoundationDate( entity.getReligiousOrderFoundationDate());
             religiousOrderModel.setReligiousOrderName( entity.getReligiousOrderName());
             religiousOrderModel.setSaintsOnOrder( toSaintModel(entity.getSaintsOnOrder()));
+            religiousOrderModel.setCountOfSaintsOnOrder( entity.getSaintsOnOrder().size() );
 
             return religiousOrderModel;
         }

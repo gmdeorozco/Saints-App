@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.saintsapp.saintsserver.View;
 import com.saintsapp.saintsserver.assemblers.SaintModelAssembler;
 import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
 import com.saintsapp.saintsserver.entities.SaintEntity;
@@ -65,21 +67,25 @@ public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orde
     }
 
     @DeleteMapping("/api/saints/{id}/delete")
-    public ResponseEntity<SaintModel> deleteSaintEntity( @PathVariable(value = "id") Long id ){                
-        return saintsService.deleteSaintEntity(id)
-            .map(saintModelAssembler::toModel)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());         
+    public ResponseEntity<SaintModel> deleteSaintEntity( @PathVariable( value = "id" ) Long id ){    
+        
+        ResponseEntity<SaintModel> sm = saintsService.getById(id)
+            .map( saintModelAssembler::toModelDelete )
+            .map( ResponseEntity::ok ) 
+            .orElse( ResponseEntity.notFound().build() ) ;   
+
+        return saintsService.deleteSaintEntity( id ) ? sm : ResponseEntity.notFound().build() ;
+            
            
     }
 
     @GetMapping("/api/saints/{id}")
 	public ResponseEntity<SaintModel> getSaintById( @PathVariable("id") Long id ) 
 	{
-		return saintsService.getById(id) 
-				.map(saintModelAssembler::toModel) 
-				.map(ResponseEntity::ok) 
-				.orElse(ResponseEntity.notFound().build());
+		return saintsService.getById( id ) 
+				.map( saintModelAssembler::toModel ) 
+				.map( ResponseEntity::ok ) 
+				.orElse( ResponseEntity.notFound().build() ) ;
 	}
 
     @GetMapping("/api/saints-list")
@@ -88,7 +94,7 @@ public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orde
 		List<SaintEntity> orderEntities = saintsService.getAllSaintEntities();
 		
 		return new ResponseEntity<>(
-                saintModelAssembler.toCollectionModel(orderEntities),
+                saintModelAssembler.toCollectionModel( orderEntities ),
                 HttpStatus.OK);
 	}
 

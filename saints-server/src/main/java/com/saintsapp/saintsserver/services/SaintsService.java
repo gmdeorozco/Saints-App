@@ -27,13 +27,28 @@ public class SaintsService {
         return (List<SaintEntity>) saintsRepository.findAll();
     }
 
-    public Optional<SaintEntity> deleteSaintEntity(Long id){
-        Optional<SaintEntity> opt = saintsRepository.findById(id);
-        opt.ifPresent( saint -> {
-            saint.setOrderFoundedBySaint(null);
-            saint.setSaintReligiousOrder(null);
-        });
-        opt.ifPresent(saintsRepository::delete);
-        return opt;
+    public boolean deleteSaintEntity( Long id ){
+       
+      try{
+        Optional< SaintEntity > opt = saintsRepository.findById( id );
+            opt.ifPresent( saint -> {
+                if( saint.getOrderFoundedBySaint() != null ){
+                    saint.getOrderFoundedBySaint().setOrderFounder( null );
+                }
+                saint.setOrderFoundedBySaint( null );
+
+                saint.getSaintReligiousOrder().getSaintsOnOrder().remove( saint );
+                saint.setSaintReligiousOrder( null );
+                
+
+                saintsRepository.delete( saint );
+            });
+        return true;
+      } 
+      catch ( Exception e ){
+        System.out.println( e.getMessage() );
+        return false;
+      }
+      
     }
 }

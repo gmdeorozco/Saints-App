@@ -32,7 +32,7 @@ public class SaintEntity implements Serializable {
     @JsonIgnore
     private ReligiousOrderEntity saintReligiousOrder;
 
-    @OneToOne(mappedBy = "orderFounder")
+    @OneToOne( mappedBy = "orderFounder" )
     @JsonIgnore
     private ReligiousOrderEntity orderFoundedBySaint;
 

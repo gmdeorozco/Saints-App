@@ -87,7 +87,7 @@ public ResultPayload submitAnswer( AnswerPayload answerPayload){
     EloResult result = 
     restTemplate
         .getForObject(
-            "https://8080-gmdeorozco-eloservice-pyzcjj70ubb.ws-us77.gitpod.io/elo/{elo1}/{elo2}/{ng1}/{ng2}/{won}", 
+            "https://8080-gmdeorozco-eloservice-pyzcjj70ubb.ws-us78.gitpod.io/elo/{elo1}/{elo2}/{ng1}/{ng2}/{won}", 
             EloResult.class, 
             interaction.getTrivia().getElo(), 
             user.getElo(),

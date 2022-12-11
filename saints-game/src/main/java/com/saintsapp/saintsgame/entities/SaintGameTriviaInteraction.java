@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Entity @Data @AllArgsConstructor @NoArgsConstructor @Builder
 public class SaintGameTriviaInteraction {
     @Id @GeneratedValue
-    @JsonView(value = { View.UserView.Admin.class })
+    @JsonView(value = { View.UserView.User.class })
     private Long id;
 
     @ManyToOne

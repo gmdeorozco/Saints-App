@@ -4,6 +4,8 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.saintsapp.saintsserver.View;
 import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -30,4 +32,6 @@ public class SaintModel extends RepresentationModel < SaintModel > {
     private ReligiousOrderModel saintReligiousOrder;
 
     private ReligiousOrderModel orderFoundedBySaint;
+
+   
 }

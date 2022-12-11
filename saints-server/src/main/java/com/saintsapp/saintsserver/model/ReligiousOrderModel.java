@@ -32,4 +32,5 @@ public class ReligiousOrderModel extends RepresentationModel < ReligiousOrderMod
     private List<SaintModel> saintsOnOrder;
 
     private SaintModel orderFounder;
+    private int countOfSaintsOnOrder;
 }
