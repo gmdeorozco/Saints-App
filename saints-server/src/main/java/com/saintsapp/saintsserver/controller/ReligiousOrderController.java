@@ -42,10 +42,12 @@ public class ReligiousOrderController {
     }
 
     @PostMapping("/api/orders/create")
-    public ResponseEntity<ReligiousOrderModel> createReligiousOrderEntity( @RequestBody ReligiousOrderEntity order ){                
+    public ResponseEntity<ReligiousOrderModel> createReligiousOrderEntity( 
+        @RequestBody ReligiousOrderEntity order ){                
        
     return new ResponseEntity<ReligiousOrderModel>(
-        religiousOrderModelAssembler.toModel(religiousOrderService.saveReligiousOrderEntity( order )),HttpStatus.CREATED); 
+        religiousOrderModelAssembler
+            .toModel(religiousOrderService.saveReligiousOrderEntity( order )),HttpStatus.CREATED); 
                
     }
 
