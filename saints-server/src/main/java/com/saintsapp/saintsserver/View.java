@@ -9,6 +9,14 @@ public class View {
           //Intenal View for User, will inherit all filds in External
           public static interface Admin extends User {
           }
+
+          public static interface Order{
+
+          }
+
+          public static interface Saint{
+            
+          }
        
     }
 }

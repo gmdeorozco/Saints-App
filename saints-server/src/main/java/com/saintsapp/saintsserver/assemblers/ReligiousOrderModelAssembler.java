@@ -38,6 +38,28 @@ public class ReligiousOrderModelAssembler
                 methodOn(ReligiousOrderController.class)
                 .getReligiousOrderById(entity.getId()))
                 .withSelfRel());
+
+            religiousOrderModel.add( linkTo(
+                methodOn( ReligiousOrderController.class )
+                .deleteReligiousOrderEntity(entity.getId()))
+                .withRel("deleteOrder")
+            ); 
+
+            religiousOrderModel.add( 
+                linkTo( 
+                    methodOn( ReligiousOrderController.class )
+                    .updateReligiousOrderEntity(entity)
+                 ).withRel("update")
+             );
+
+            religiousOrderModel.add(
+                linkTo(
+                    methodOn( ReligiousOrderController.class )
+                    .getAllOrders()
+                 ).withRel("allOrders")
+            );
+
+
         
            
 

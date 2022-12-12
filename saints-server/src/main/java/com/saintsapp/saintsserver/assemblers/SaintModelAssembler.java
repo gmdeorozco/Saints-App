@@ -133,16 +133,32 @@ public class SaintModelAssembler
             return Collections.emptyList();
 
         return saints.stream()
-                .map( saint -> SaintModel.builder()
+                .map( saint -> 
+                    SaintModel.builder()
                     .id( saint.getId())
                     .saintName( saint.getSaintName())
                     .build()
-                        . add( linkTo(
+                        .add( linkTo(
                             methodOn( SaintsController.class)
                             .getSaintById( saint.getId()))
                             .withSelfRel())
+                        .add( linkTo(
+                                methodOn(ReligiousOrderController.class )
+                                    .getReligiousOrderById( saint.getSaintReligiousOrder().getId() ))
+                                .withRel( "saint_religious_order" ) )
+                        
+                        .add( linkTo(
+                            methodOn(SaintsController.class )
+                                .deleteSaintEntity( saint.getId()))
+                            .withRel( "delete" ))
+                        
+                        .add( linkTo(
+                                methodOn(SaintsController.class )
+                                    .updateSaintEntity( saint ))
+                                .withRel("update"))
+                )
                 
-                ).collect(Collectors.toList());
+                .collect(Collectors.toList());
     }
 
 }

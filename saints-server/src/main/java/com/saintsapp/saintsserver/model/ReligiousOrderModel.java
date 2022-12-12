@@ -7,6 +7,8 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.saintsapp.saintsserver.View;
 import com.saintsapp.saintsserver.entities.SaintEntity;
 
 import lombok.AllArgsConstructor;
@@ -25,12 +27,22 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 
 public class ReligiousOrderModel extends RepresentationModel < ReligiousOrderModel >{
+    
+    @JsonView( View.UserView.Order.class )
     private Long id;
+
+    @JsonView( View.UserView.Order.class )
     private String religiousOrderName;
+
+    @JsonView( View.UserView.Order.class )
     private LocalDate religiousOrderFoundationDate;
 
+    @JsonView( View.UserView.Order.class )
     private List<SaintModel> saintsOnOrder;
 
+    @JsonView( View.UserView.Order.class )
     private SaintModel orderFounder;
+
+    @JsonView( View.UserView.Order.class )
     private int countOfSaintsOnOrder;
 }
