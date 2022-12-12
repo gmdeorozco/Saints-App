@@ -16,7 +16,10 @@ import com.saintsapp.saintsserver.services.SaintsService;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -91,6 +94,8 @@ public class SaintModelAssembler
         saintModel.setSaintName( entity.getSaintName() );
         saintModel.setSaintPlaceOfBirth( entity.getSaintPlaceOfBirth() );
         saintModel.setSaintReligiousOrder( toReligiousOrderModel( entity.getSaintReligiousOrder() ) );
+        saintModel.setOrderFounder( entity.isOrderFounder() );
+        saintModel.setSaintFriends( toSaintModel( entity.getFriendSaints() ) );
         
         return saintModel;
     }
@@ -121,6 +126,23 @@ public class SaintModelAssembler
                     .getReligiousOrderById( religiousOrderEntity.getId()))
                     .withSelfRel());   
             
+    }
+
+    private List < SaintModel > toSaintModel( List<SaintEntity> saints ) {
+        if ( saints == null || saints.isEmpty() )
+            return Collections.emptyList();
+
+        return saints.stream()
+                .map( saint -> SaintModel.builder()
+                    .id( saint.getId())
+                    .saintName( saint.getSaintName())
+                    .build()
+                        . add( linkTo(
+                            methodOn( SaintsController.class)
+                            .getSaintById( saint.getId()))
+                            .withSelfRel())
+                
+                ).collect(Collectors.toList());
     }
 
 }

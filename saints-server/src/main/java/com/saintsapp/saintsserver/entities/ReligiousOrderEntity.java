@@ -37,7 +37,7 @@ public class ReligiousOrderEntity implements Serializable{
    // @JsonIgnore
     @OneToOne
     @JoinColumn(name = "orderFounderId", referencedColumnName = "id")
-    private SaintEntity orderFounder;
+    private SaintEntity orderFoundedBy;
 
     
 

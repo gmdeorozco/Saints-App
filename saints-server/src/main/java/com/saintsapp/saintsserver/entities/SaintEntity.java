@@ -1,11 +1,15 @@
 package com.saintsapp.saintsserver.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,7 +21,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity @Data @AllArgsConstructor @Builder @NoArgsConstructor
-@ToString(exclude = {"saintReligiousOrder","orderFoundedBySaint"})
+@ToString(exclude = {"saintReligiousOrder","orderFoundedBySaint","friendSaints"})
 public class SaintEntity implements Serializable {
     
     @Id @GeneratedValue
@@ -32,8 +36,21 @@ public class SaintEntity implements Serializable {
     @JsonIgnore
     private ReligiousOrderEntity saintReligiousOrder;
 
-    @OneToOne( mappedBy = "orderFounder" )
+    @OneToOne( mappedBy = "orderFoundedBy" )
     @JsonIgnore
     private ReligiousOrderEntity orderFoundedBySaint;
+
+   
+    
+    @JsonIgnore
+    @Builder.Default
+    private List<SaintEntity> friendSaints = new ArrayList<SaintEntity>();
+
+
+    public boolean isOrderFounder(){
+        return this.getSaintReligiousOrder().getOrderFoundedBy() == this;
+    }
+
+
 
 }

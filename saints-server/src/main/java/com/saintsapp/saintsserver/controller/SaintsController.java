@@ -48,7 +48,7 @@ public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orde
                     saint.setSaintReligiousOrder( o );
                     if (isFounder) {
                         saint.setOrderFoundedBySaint( o );
-                        o.setOrderFounder(saint);
+                        o.setOrderFoundedBy(saint);
                     }
                 }
                     );
@@ -56,6 +56,14 @@ public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orde
     return new ResponseEntity<SaintModel>(
         saintModelAssembler.toModel(saintsService.saveSaintEntity( saint )),HttpStatus.CREATED); 
                
+    }
+
+    @GetMapping("/api/saints/{id}/friends")
+    public ResponseEntity<CollectionModel<SaintModel>> getSaintFriends(@PathVariable(value = "id") Long id){
+        List<SaintEntity> friends = saintsService.getFriendSaints(id); 
+        return new ResponseEntity<>(
+                saintModelAssembler.toCollectionModel( friends ),
+                HttpStatus.OK);
     }
 
     @PutMapping("/api/saints/create")

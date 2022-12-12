@@ -45,7 +45,7 @@ public class ReligiousOrderService {
     public Optional<ReligiousOrderEntity> deleteReligiousOrderEntity(Long id){
         Optional<ReligiousOrderEntity> opt = religiousOrderRepository.findById(id);
         opt.ifPresent( rel -> {
-            rel.setOrderFounder(null);
+            rel.setOrderFoundedBy(null);
             rel.getSaintsOnOrder().stream()
                 .forEach( saint -> {
                     saint.setSaintReligiousOrder(null);

@@ -1,5 +1,7 @@
 package com.saintsapp.saintsserver.model;
 
+import java.util.List;
+
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
@@ -32,6 +34,7 @@ public class SaintModel extends RepresentationModel < SaintModel > {
     private ReligiousOrderModel saintReligiousOrder;
 
     private ReligiousOrderModel orderFoundedBySaint;
-
+    private boolean isOrderFounder;
+    private List<SaintModel> saintFriends;
    
 }

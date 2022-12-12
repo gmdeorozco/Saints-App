@@ -42,7 +42,7 @@ public class ReligiousOrderModelAssembler
            
 
             religiousOrderModel.setId( entity.getId() );
-            religiousOrderModel.setOrderFounder( entity.getOrderFounder()!=null ? saintModelAssembler.toModel( entity.getOrderFounder() ):null );
+            religiousOrderModel.setOrderFounder( entity.getOrderFoundedBy()!=null ? saintModelAssembler.toModel( entity.getOrderFoundedBy() ):null );
             religiousOrderModel.setReligiousOrderFoundationDate( entity.getReligiousOrderFoundationDate());
             religiousOrderModel.setReligiousOrderName( entity.getReligiousOrderName());
             religiousOrderModel.setSaintsOnOrder( toSaintModel(entity.getSaintsOnOrder()));
@@ -66,7 +66,7 @@ public class ReligiousOrderModelAssembler
                 return Collections.emptyList();
     
             return saints.stream()
-                    .map( saint -> saintModelAssembler.toModel(saint) )
+                    .map( saint -> saintModelAssembler.toModel( saint ) )
                     .collect( Collectors.toList() );
         }
 
