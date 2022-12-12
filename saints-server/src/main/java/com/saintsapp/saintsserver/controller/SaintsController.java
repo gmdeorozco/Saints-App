@@ -62,7 +62,7 @@ public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orde
     public ResponseEntity<CollectionModel<SaintModel>> getSaintFriends(@PathVariable(value = "id") Long id){
         List<SaintEntity> friends = saintsService.getFriendSaints(id); 
         return new ResponseEntity<>(
-                saintModelAssembler.toCollectionModel( friends ),
+                saintModelAssembler.toCollectionModelSaintFriends( id, friends ),
                 HttpStatus.OK);
     }
 
@@ -115,4 +115,13 @@ public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orde
 				saintModelAssembler.toCollectionModel(actorEntities), 
 				HttpStatus.OK);
 	}
+
+    @PutMapping("/api/saints/addfriends/{id1}/{id2}")
+    public ResponseEntity<SaintModel> addFriend( @PathVariable( value = "id1") Long saintId1,
+                                                    @PathVariable( value = "id2")  Long saintId2 ){
+         return 
+            ResponseEntity.ok( saintModelAssembler
+                                .toModel( saintsService.addFriend(saintId1, saintId2) ) );
+            
+    }
 }

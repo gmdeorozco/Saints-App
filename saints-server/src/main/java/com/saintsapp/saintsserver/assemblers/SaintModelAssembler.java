@@ -110,6 +110,17 @@ public class SaintModelAssembler
 		return saintModels;
 	}
 
+
+
+	public CollectionModel<SaintModel> toCollectionModelSaintFriends(Long id, Iterable<? extends SaintEntity> entities) 
+	{
+		CollectionModel<SaintModel> saintModels = super.toCollectionModel(entities);
+		
+		saintModels.add(linkTo(methodOn(SaintsController.class).getSaintFriends(id)).withSelfRel());
+		
+		return saintModels;
+	}
+
     private ReligiousOrderModel toReligiousOrderModel( ReligiousOrderEntity religiousOrderEntity ) {
         if( religiousOrderEntity == null ){
             return null;
