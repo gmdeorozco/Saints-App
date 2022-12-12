@@ -46,18 +46,18 @@ public class DoCreator {
                                                 .build());
 
                         ReligiousOrderEntity order = restTemplate.postForObject(
-                            "https://8080-gmdeorozco-saintsapp-n7lvhhts40z.ws-us77.gitpod.io/api/orders/create", 
+                            "https://8080-gmdeorozco-saintsapp-n7lvhhts40z.ws-us78.gitpod.io/api/orders/create", 
                             orderRequest, 
                             ReligiousOrderEntity.class 
                                                                             );
                             Long orderId = order.getId();
                         SaintEntity saint = restTemplate.postForObject(
-                            "https://8080-gmdeorozco-saintsapp-n7lvhhts40z.ws-us77.gitpod.io/api/saints/create/"+orderId+"/false", 
+                            "https://8080-gmdeorozco-saintsapp-n7lvhhts40z.ws-us78.gitpod.io/api/saints/create/"+orderId+"/false", 
                             saintRequest, 
                             SaintEntity.class);
 
                         SaintEntity saint2 = restTemplate.postForObject(
-                                "https://8080-gmdeorozco-saintsapp-n7lvhhts40z.ws-us77.gitpod.io/api/saints/create/"+orderId+"/true", 
+                                "https://8080-gmdeorozco-saintsapp-n7lvhhts40z.ws-us78.gitpod.io/api/saints/create/"+orderId+"/true", 
                                 saintRequest2, 
                                 SaintEntity.class);
 

@@ -31,10 +31,15 @@ public class ReligiousOrderEntity implements Serializable{
 
    // @JsonIgnore
     @OneToMany(mappedBy = "saintReligiousOrder")
+    @Builder.Default
     private List<SaintEntity> saintsOnOrder = new ArrayList <SaintEntity>();
 
    // @JsonIgnore
     @OneToOne
     @JoinColumn(name = "orderFounderId", referencedColumnName = "id")
-    private SaintEntity orderFounder;
+    private SaintEntity orderFoundedBy;
+
+    
+
+    
 }

@@ -38,14 +38,37 @@ public class ReligiousOrderModelAssembler
                 methodOn(ReligiousOrderController.class)
                 .getReligiousOrderById(entity.getId()))
                 .withSelfRel());
+
+            religiousOrderModel.add( linkTo(
+                methodOn( ReligiousOrderController.class )
+                .deleteReligiousOrderEntity(entity.getId()))
+                .withRel("deleteOrder")
+            ); 
+
+            religiousOrderModel.add( 
+                linkTo( 
+                    methodOn( ReligiousOrderController.class )
+                    .updateReligiousOrderEntity(entity)
+                 ).withRel("update")
+             );
+
+            religiousOrderModel.add(
+                linkTo(
+                    methodOn( ReligiousOrderController.class )
+                    .getAllOrders()
+                 ).withRel("allOrders")
+            );
+
+
         
            
 
             religiousOrderModel.setId( entity.getId() );
-            religiousOrderModel.setOrderFounder( entity.getOrderFounder()!=null ? saintModelAssembler.toModel( entity.getOrderFounder() ):null );
+            religiousOrderModel.setOrderFounder( entity.getOrderFoundedBy()!=null ? saintModelAssembler.toModel( entity.getOrderFoundedBy() ):null );
             religiousOrderModel.setReligiousOrderFoundationDate( entity.getReligiousOrderFoundationDate());
             religiousOrderModel.setReligiousOrderName( entity.getReligiousOrderName());
             religiousOrderModel.setSaintsOnOrder( toSaintModel(entity.getSaintsOnOrder()));
+            religiousOrderModel.setCountOfSaintsOnOrder( entity.getSaintsOnOrder().size() );
 
             return religiousOrderModel;
         }
@@ -65,7 +88,7 @@ public class ReligiousOrderModelAssembler
                 return Collections.emptyList();
     
             return saints.stream()
-                    .map( saint -> saintModelAssembler.toModel(saint) )
+                    .map( saint -> saintModelAssembler.toModel( saint ) )
                     .collect( Collectors.toList() );
         }
 

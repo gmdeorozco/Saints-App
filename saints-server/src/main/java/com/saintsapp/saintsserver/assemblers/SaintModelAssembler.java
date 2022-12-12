@@ -3,16 +3,25 @@ package com.saintsapp.saintsserver.assemblers;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.saintsapp.saintsserver.controller.ReligiousOrderController;
 import com.saintsapp.saintsserver.controller.SaintsController;
 import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
 import com.saintsapp.saintsserver.entities.SaintEntity;
 import com.saintsapp.saintsserver.model.ReligiousOrderModel;
 import com.saintsapp.saintsserver.model.SaintModel;
+import com.saintsapp.saintsserver.repository.SaintsRepository;
+import com.saintsapp.saintsserver.services.SaintsService;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 
 @Component
@@ -23,11 +32,40 @@ public class SaintModelAssembler
         super(SaintsController.class , SaintModel.class );
     }
 
+    @Autowired
+    SaintsService saintsService;
   
+
+    public SaintModel toModelDelete( SaintEntity entity ){
+        
+        SaintModel saintModel = instantiateModel( entity );
+
+       
+        
+            saintModel.add( linkTo(
+                methodOn(SaintsController.class )
+                    .createSaintEntity( entity.getSaintReligiousOrder().getId(), entity.getOrderFoundedBySaint() != null, entity ))
+                .withRel("saveItAgainToDatabaseWithThisPayload"));
+
+                saintModel.setId( entity.getId() );
+                saintModel.setOrderFoundedBySaint( toReligiousOrderModel( entity.getOrderFoundedBySaint() ));
+                saintModel.setSaintIsApostle( entity.isSaintIsApostle() );
+                saintModel.setSaintName( entity.getSaintName() );
+                saintModel.setSaintPlaceOfBirth( entity.getSaintPlaceOfBirth() );
+                saintModel.setSaintReligiousOrder( toReligiousOrderModel( entity.getSaintReligiousOrder() ) );
+                
+            return saintModel;
+     
+        
+    }
+
     @Override
     public SaintModel toModel( SaintEntity entity ){
 
-        SaintModel saintModel = instantiateModel(entity);
+        SaintModel saintModel = instantiateModel( entity );
+
+        
+        
         
         saintModel.add( linkTo(
             methodOn(SaintsController.class )
@@ -37,12 +75,12 @@ public class SaintModelAssembler
         saintModel.add( linkTo(
                 methodOn(ReligiousOrderController.class )
                     .getReligiousOrderById( entity.getSaintReligiousOrder().getId() ))
-                .withRel("saint_religious_order"));
+                .withRel( "saint_religious_order" ) );
         
         saintModel.add( linkTo(
             methodOn(SaintsController.class )
                 .deleteSaintEntity( entity.getId()))
-            .withRel("delete"));
+            .withRel( "delete" ));
         
         saintModel.add( linkTo(
                 methodOn(SaintsController.class )
@@ -50,12 +88,14 @@ public class SaintModelAssembler
                 .withRel("update"));
         
         
-        saintModel.setId( entity.getId());
+        saintModel.setId( entity.getId() );
         saintModel.setOrderFoundedBySaint( toReligiousOrderModel( entity.getOrderFoundedBySaint() ));
         saintModel.setSaintIsApostle( entity.isSaintIsApostle() );
         saintModel.setSaintName( entity.getSaintName() );
         saintModel.setSaintPlaceOfBirth( entity.getSaintPlaceOfBirth() );
-        saintModel.setSaintReligiousOrder( toReligiousOrderModel( entity.getSaintReligiousOrder() ));
+        saintModel.setSaintReligiousOrder( toReligiousOrderModel( entity.getSaintReligiousOrder() ) );
+        saintModel.setOrderFounder( entity.isOrderFounder() );
+        saintModel.setSaintFriends( toSaintModel( entity.getFriendSaints() ) );
         
         return saintModel;
     }
@@ -70,6 +110,17 @@ public class SaintModelAssembler
 		return saintModels;
 	}
 
+
+
+	public CollectionModel<SaintModel> toCollectionModelSaintFriends(Long id, Iterable<? extends SaintEntity> entities) 
+	{
+		CollectionModel<SaintModel> saintModels = super.toCollectionModel(entities);
+		
+		saintModels.add(linkTo(methodOn(SaintsController.class).getSaintFriends(id)).withSelfRel());
+		
+		return saintModels;
+	}
+
     private ReligiousOrderModel toReligiousOrderModel( ReligiousOrderEntity religiousOrderEntity ) {
         if( religiousOrderEntity == null ){
             return null;
@@ -79,12 +130,46 @@ public class SaintModelAssembler
             .id( religiousOrderEntity.getId())
             .religiousOrderFoundationDate(religiousOrderEntity.getReligiousOrderFoundationDate())
             .religiousOrderName(religiousOrderEntity.getReligiousOrderName())
+            .countOfSaintsOnOrder( religiousOrderEntity.getSaintsOnOrder().size() )
             .build()
                 .add( linkTo(
                     methodOn( ReligiousOrderController.class)
                     .getReligiousOrderById( religiousOrderEntity.getId()))
                     .withSelfRel());   
             
+    }
+
+    private List < SaintModel > toSaintModel( List<SaintEntity> saints ) {
+        if ( saints == null || saints.isEmpty() )
+            return Collections.emptyList();
+
+        return saints.stream()
+                .map( saint -> 
+                    SaintModel.builder()
+                    .id( saint.getId())
+                    .saintName( saint.getSaintName())
+                    .build()
+                        .add( linkTo(
+                            methodOn( SaintsController.class)
+                            .getSaintById( saint.getId()))
+                            .withSelfRel())
+                        .add( linkTo(
+                                methodOn(ReligiousOrderController.class )
+                                    .getReligiousOrderById( saint.getSaintReligiousOrder().getId() ))
+                                .withRel( "saint_religious_order" ) )
+                        
+                        .add( linkTo(
+                            methodOn(SaintsController.class )
+                                .deleteSaintEntity( saint.getId()))
+                            .withRel( "delete" ))
+                        
+                        .add( linkTo(
+                                methodOn(SaintsController.class )
+                                    .updateSaintEntity( saint ))
+                                .withRel("update"))
+                )
+                
+                .collect(Collectors.toList());
     }
 
 }

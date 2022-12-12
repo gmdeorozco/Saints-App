@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.saintsapp.saintsserver.View;
 import com.saintsapp.saintsserver.assemblers.ReligiousOrderModelAssembler;
 import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
 import com.saintsapp.saintsserver.model.ReligiousOrderModel;
@@ -40,10 +42,12 @@ public class ReligiousOrderController {
     }
 
     @PostMapping("/api/orders/create")
-    public ResponseEntity<ReligiousOrderModel> createReligiousOrderEntity( @RequestBody ReligiousOrderEntity order){                
+    public ResponseEntity<ReligiousOrderModel> createReligiousOrderEntity( 
+        @RequestBody ReligiousOrderEntity order ){                
        
     return new ResponseEntity<ReligiousOrderModel>(
-        religiousOrderModelAssembler.toModel(religiousOrderService.saveReligiousOrderEntity( order )),HttpStatus.CREATED); 
+        religiousOrderModelAssembler
+            .toModel(religiousOrderService.saveReligiousOrderEntity( order )),HttpStatus.CREATED); 
                
     }
 
@@ -55,15 +59,7 @@ public class ReligiousOrderController {
                
     }
 
-    @DeleteMapping("/api/orders/{id}/delete")
-    public ResponseEntity<ReligiousOrderModel> deleteReligiousOrderEntity( @PathVariable(value = "id") Long id){             
-        return religiousOrderService.deleteReligiousOrderEntity(id)
-            .map(religiousOrderModelAssembler::toModel)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
-        
-    }
-
+    @JsonView( View.UserView.Order.class )
     @GetMapping("/api/orders/{id}")
     public ResponseEntity<ReligiousOrderModel> getReligiousOrderById(@PathVariable("id") Long id) {
         return religiousOrderService.getById(id)
@@ -72,7 +68,20 @@ public class ReligiousOrderController {
             .orElse(ResponseEntity.notFound().build());
         
     }
-  
+
+    @DeleteMapping("/api/orders/{id}/delete")
+    public ResponseEntity<ReligiousOrderModel> deleteReligiousOrderEntity( @PathVariable(value = "id") Long id){             
+        ResponseEntity<ReligiousOrderModel> rm = religiousOrderService.getById(id)
+            .map(religiousOrderModelAssembler::toModel)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+
+        return religiousOrderService.deleteReligiousOrderEntity ( id ) ? rm : ResponseEntity.notFound().build() ;
+        
+    }
+
+    
+   //Use when we work pagination
     @GetMapping("/api/orders-list")
 	public ResponseEntity<PagedModel<ReligiousOrderModel>> getAllOrders(Pageable pageable) 
 	{

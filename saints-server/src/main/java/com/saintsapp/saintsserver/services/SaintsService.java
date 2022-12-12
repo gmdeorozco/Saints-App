@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.saintsapp.saintsserver.entities.SaintEntity;
 import com.saintsapp.saintsserver.repository.SaintsRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class SaintsService {
     @Autowired
@@ -27,13 +29,54 @@ public class SaintsService {
         return (List<SaintEntity>) saintsRepository.findAll();
     }
 
-    public Optional<SaintEntity> deleteSaintEntity(Long id){
-        Optional<SaintEntity> opt = saintsRepository.findById(id);
-        opt.ifPresent( saint -> {
-            saint.setOrderFoundedBySaint(null);
-            saint.setSaintReligiousOrder(null);
-        });
-        opt.ifPresent(saintsRepository::delete);
-        return opt;
+    
+    public List<SaintEntity> getFriendSaints( Long id ){
+        return saintsRepository.findById( id )
+            .map( saint -> saint.getFriendSaints())
+            .orElse( List.of());           
+            
+    }
+
+    @Transactional
+    public SaintEntity addFriend( Long saintId1, Long saintId2 ){
+        SaintEntity saint1 = saintsRepository.findById( saintId1 ).get();
+        SaintEntity saint2 = saintsRepository.findById( saintId2 ).get();
+
+        System.out.println("here 111111111111");
+
+        saint1.getFriendSaints().add( saint2 );
+        saint2.getFriendSaints().add( saint1 );
+
+        
+
+        saintsRepository.save(saint1);
+        saintsRepository.save(saint2);
+
+        return saint1;
+    }
+
+    public boolean deleteSaintEntity( Long id ){
+       
+      try{
+        Optional< SaintEntity > opt = saintsRepository.findById( id );
+            opt.ifPresent( saint -> {
+                if( saint.getOrderFoundedBySaint() != null ){
+                    saint.getOrderFoundedBySaint().setOrderFoundedBy( null );
+                }
+                saint.setOrderFoundedBySaint( null );
+
+                saint.getSaintReligiousOrder().getSaintsOnOrder().remove( saint );
+                saint.setSaintReligiousOrder( null );
+                
+
+                saintsRepository.delete( saint );
+            });
+        return true;
+      } 
+      catch ( Exception e ){
+        System.out.println( e.getMessage() );
+        return false;
+      }
+      
     }
 }

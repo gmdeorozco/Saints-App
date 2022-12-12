@@ -42,18 +42,28 @@ public class ReligiousOrderService {
       
     }
 
-    public Optional<ReligiousOrderEntity> deleteReligiousOrderEntity(Long id){
-        Optional<ReligiousOrderEntity> opt = religiousOrderRepository.findById(id);
-        opt.ifPresent( rel -> {
-            rel.setOrderFounder(null);
-            rel.getSaintsOnOrder().stream()
-                .forEach( saint -> {
-                    saint.setSaintReligiousOrder(null);
-                    saintsRepository.save(saint);
+    public boolean deleteReligiousOrderEntity(Long id){
+
+        try{
+            Optional<ReligiousOrderEntity> opt = religiousOrderRepository.findById(id);
+                opt.ifPresent( rel -> {
+
+                    rel.getOrderFoundedBy().setOrderFoundedBySaint(null);
+                    rel.setOrderFoundedBy(null);
+                    
+                    rel.getSaintsOnOrder().stream()
+                        .forEach( saint -> {
+                            saint.setSaintReligiousOrder(null);
+                            saintsRepository.save(saint);
                                     });
         });
         opt.ifPresent(religiousOrderRepository::delete);
-        
-        return opt;
+        return true;
+
+        } catch( Exception e ){
+            System.out.println( e.getMessage() );
+            return false;
+        }
+   
     }
 }
