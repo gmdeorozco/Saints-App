@@ -38,7 +38,7 @@ public class SaintEntity implements Serializable {
 
     @OneToOne( mappedBy = "orderFoundedBy" )
     @JsonIgnore
-    private ReligiousOrderEntity orderFoundedBySaint;
+    public ReligiousOrderEntity orderFoundedBySaint;
 
    
     @ManyToMany
