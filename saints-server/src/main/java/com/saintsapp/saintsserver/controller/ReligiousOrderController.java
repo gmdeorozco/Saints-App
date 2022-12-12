@@ -71,15 +71,17 @@ public class ReligiousOrderController {
 
     @DeleteMapping("/api/orders/{id}/delete")
     public ResponseEntity<ReligiousOrderModel> deleteReligiousOrderEntity( @PathVariable(value = "id") Long id){             
-        return religiousOrderService.deleteReligiousOrderEntity(id)
+        ResponseEntity<ReligiousOrderModel> rm = religiousOrderService.getById(id)
             .map(religiousOrderModelAssembler::toModel)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
+
+        return religiousOrderService.deleteReligiousOrderEntity ( id ) ? rm : ResponseEntity.notFound().build() ;
         
     }
 
     
-  
+   //Use when we work pagination
     @GetMapping("/api/orders-list")
 	public ResponseEntity<PagedModel<ReligiousOrderModel>> getAllOrders(Pageable pageable) 
 	{
