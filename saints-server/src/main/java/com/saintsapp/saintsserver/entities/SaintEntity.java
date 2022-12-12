@@ -41,7 +41,7 @@ public class SaintEntity implements Serializable {
     private ReligiousOrderEntity orderFoundedBySaint;
 
    
-    
+    @ManyToMany
     @JsonIgnore
     @Builder.Default
     private List<SaintEntity> friendSaints = new ArrayList<SaintEntity>();
