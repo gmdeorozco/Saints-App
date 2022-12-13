@@ -92,6 +92,14 @@ public class ReligiousOrderModelAssembler
                     .collect( Collectors.toList() );
         }
 
+        public CollectionModel<ReligiousOrderModel> toCollectionModelSaintOrders(Long id, List<ReligiousOrderEntity> orders) {
+            CollectionModel<ReligiousOrderModel> orderModels = super.toCollectionModel(orders);
+		
+		    orderModels.add(linkTo(methodOn(SaintsController.class).getSaintOrders( id )).withSelfRel());
+		
+		    return orderModels;
+        }
+
         
 
 }

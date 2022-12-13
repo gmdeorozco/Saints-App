@@ -1,6 +1,7 @@
 package com.saintsapp.saintsserver;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.EntityManager;
@@ -11,8 +12,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.saintsapp.saintsserver.entities.Pope;
 import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
 import com.saintsapp.saintsserver.entities.SaintEntity;
+import com.saintsapp.saintsserver.repository.PopeRepository;
 import com.saintsapp.saintsserver.services.ReligiousOrderService;
 import com.saintsapp.saintsserver.services.SaintsService;
 
@@ -29,10 +32,20 @@ public class LoadDatabase {
     @Autowired
     EntityManager em;
 
+    @Autowired
+    PopeRepository popeRepository;
+
     @Bean
     CommandLineRunner iniDatabase(){
 
                     return args -> {
+                        Pope francis = Pope.builder()
+                            .name("Frnancis")
+                            .canonizedSaints(new ArrayList<>())
+                            .gender('M')
+                            .build();
+
+                        popeRepository.save(francis);
 
                         ReligiousOrderEntity jesuitOrder = 
                             ReligiousOrderEntity.builder()
@@ -53,9 +66,14 @@ public class LoadDatabase {
                                 .saintQuote("Love is shown more in deeds than in words." )
                                 .saintReligiousOrders(List.of( jesuitOrder ))
                                 .ordersFoundedBySaint( List.of(jesuitOrder) )
+                                .canonizedBy(francis)
+                                .gender('M')
                                 .build();
 
                         loyolaIgnatius = saintsEntityService.saveSaintEntity( loyolaIgnatius );
+                        francis.getCanonizedSaints().add(loyolaIgnatius);
+
+                        popeRepository.save(francis);
 
                         log.info("Preloading..." + loyolaIgnatius);
 
@@ -68,6 +86,7 @@ public class LoadDatabase {
                                 .saintPlaceOfBirth("Spain")
                                 .saintQuote("Love is shown more in deeds than in words." )
                                 .saintReligiousOrders( List.of( jesuitOrder ) )
+                                .canonizedBy( francis )
                                 .build();
                         francisXavier = saintsEntityService.saveSaintEntity(francisXavier);
 
@@ -81,6 +100,7 @@ public class LoadDatabase {
                                 .saintPlaceOfBirth("Spain")
                                 .saintQuote("Love is shown more in deeds than in words." )
                                 .saintReligiousOrders( List.of( jesuitOrder ) )
+                                .canonizedBy( francis )
                                 .build();
                         pedroClaver = saintsEntityService.saveSaintEntity( pedroClaver );
                            
@@ -89,6 +109,9 @@ public class LoadDatabase {
                         saintsEntityService.addFriend(loyolaIgnatius.getId(), pedroClaver.getId());
 
                         jesuitOrder.getOrderFoundedBy().add(loyolaIgnatius);
+                        jesuitOrder.getSaintsOnOrder().add(pedroClaver);
+                        jesuitOrder.getSaintsOnOrder().add(francisXavier);
+                        jesuitOrder.getSaintsOnOrder().add(loyolaIgnatius);
                         religiousOrderService.saveReligiousOrderEntity( jesuitOrder );
 
  

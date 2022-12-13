@@ -54,6 +54,9 @@ public class SaintModelAssembler
                 saintModel.setName( entity.getName() );
                 saintModel.setSaintPlaceOfBirth( entity.getSaintPlaceOfBirth() );
                 saintModel.setSaintReligiousOrders( toReligiousOrderModel( entity.getSaintReligiousOrders() ) );
+                saintModel.setCanonizationDate( entity.getCanonizationDate());
+                saintModel.setCanonizedBy( entity.getCanonizedBy());
+                saintModel.setSaintFest( entity.getSaintFest());
                 
             return saintModel;
      
@@ -97,6 +100,9 @@ public class SaintModelAssembler
         saintModel.setSaintReligiousOrders( toReligiousOrderModel( entity.getSaintReligiousOrders() ) );
         saintModel.setOrderFounder( entity.isOrderFounder() );
         saintModel.setSaintFriends( toSaintModel( entity.getFriendSaints() ) );
+        saintModel.setCanonizationDate( entity.getCanonizationDate());
+        saintModel.setCanonizedBy( entity.getCanonizedBy());
+        saintModel.setSaintFest( entity.getSaintFest());
         
         return saintModel;
     }
@@ -122,7 +128,7 @@ public class SaintModelAssembler
 		return saintModels;
 	}
 
-    private List<ReligiousOrderModel> toReligiousOrderModel( List<ReligiousOrderEntity> religiousOrderEntities ) {
+    public List<ReligiousOrderModel> toReligiousOrderModel( List<ReligiousOrderEntity> religiousOrderEntities ) {
         if( religiousOrderEntities.isEmpty() ){
            new ArrayList<>();
         }
@@ -152,6 +158,10 @@ public class SaintModelAssembler
                     SaintModel.builder()
                     .id( saint.getId())
                     .name ( saint.getName())
+                    .isOrderFounder( saint.isOrderFounder() )
+                    .canonizationDate( saint.getCanonizationDate())
+                    .canonizedBy( saint.getCanonizedBy())
+                    .saintFest( saint.getSaintFest())
                     .build()
                     
                         .add( linkTo(

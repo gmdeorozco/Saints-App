@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.saintsapp.saintsserver.assemblers.ReligiousOrderModelAssembler;
 import com.saintsapp.saintsserver.assemblers.SaintModelAssembler;
 import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
 import com.saintsapp.saintsserver.entities.SaintEntity;
+import com.saintsapp.saintsserver.model.ReligiousOrderModel;
 import com.saintsapp.saintsserver.model.SaintModel;
 import com.saintsapp.saintsserver.services.ReligiousOrderService;
 import com.saintsapp.saintsserver.services.SaintsService;
@@ -36,6 +38,9 @@ ReligiousOrderService religiousOrderService;
 
 @Autowired
 SaintModelAssembler saintModelAssembler;
+
+@Autowired
+ReligiousOrderModelAssembler religiousOrderModelAssembler;
 
 @PostMapping("saints/create/{orderId}/{isFounder}")
 public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orderId" ) Long orderId, 
@@ -63,6 +68,14 @@ public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orde
         List<SaintEntity> friends = saintsService.getFriendSaints(id); 
         return new ResponseEntity<>(
                 saintModelAssembler.toCollectionModelSaintFriends( id, friends ),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("saints/{id}/orders")
+    public ResponseEntity<CollectionModel<ReligiousOrderModel>> getSaintOrders(@PathVariable(value = "id") Long id){
+        List<ReligiousOrderEntity> orders = saintsService.getSaintsOrders(id); 
+        return new ResponseEntity<>(
+                religiousOrderModelAssembler.toCollectionModelSaintOrders( id, orders ),
                 HttpStatus.OK);
     }
 

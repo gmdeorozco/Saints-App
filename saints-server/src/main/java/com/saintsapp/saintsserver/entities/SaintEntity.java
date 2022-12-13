@@ -35,6 +35,7 @@ public class SaintEntity extends Human implements Serializable {
     private LocalDate saintFest;
 
     @ManyToOne
+    @JsonIgnore
     private Pope canonizedBy;
 
     @ManyToMany

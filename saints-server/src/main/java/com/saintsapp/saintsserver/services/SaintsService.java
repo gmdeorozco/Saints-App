@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
 import com.saintsapp.saintsserver.entities.SaintEntity;
 import com.saintsapp.saintsserver.repository.SaintsRepository;
 
@@ -41,12 +42,8 @@ public class SaintsService {
         SaintEntity saint1 = saintsRepository.findById( saintId1 ).get();
         SaintEntity saint2 = saintsRepository.findById( saintId2 ).get();
 
-        System.out.println("here 111111111111");
-
         saint1.getFriendSaints().add( saint2 );
         saint2.getFriendSaints().add( saint1 );
-
-        
 
         saintsRepository.save(saint1);
         saintsRepository.save(saint2);
@@ -60,8 +57,8 @@ public class SaintsService {
         Optional< SaintEntity > opt = saintsRepository.findById( id );
             opt.ifPresent( saint -> {
                 
-                    saint.getOrdersFoundedBySaint().stream()
-                       .map( order -> order.getOrderFoundedBy().remove(saint));
+                saint.getOrdersFoundedBySaint().stream()
+                    .map( order -> order.getOrderFoundedBy().remove( saint ));
                 
                 saint.getOrdersFoundedBySaint().clear();
 
@@ -69,6 +66,11 @@ public class SaintsService {
                     .map( order -> order.getSaintsOnOrder().remove( saint ));
 
                 saint.getSaintReligiousOrders().clear();
+
+                saint.getFriendSaints().stream()
+                    .map( friend -> friend.getFriendSaints().remove( saint ));
+
+                saint.getFriendSaints().clear();
                 
                 saintsRepository.delete( saint );
             });
@@ -79,5 +81,11 @@ public class SaintsService {
         return false;
       }
       
+    }
+
+    public List<ReligiousOrderEntity> getSaintsOrders(Long id) {
+        return saintsRepository.findById(id)
+            .map( saint -> saint.getSaintReligiousOrders()  )
+            .get();
     }
 }
