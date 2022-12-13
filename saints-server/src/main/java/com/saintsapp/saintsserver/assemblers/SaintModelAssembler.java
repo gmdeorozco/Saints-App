@@ -16,6 +16,7 @@ import com.saintsapp.saintsserver.services.SaintsService;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -44,15 +45,15 @@ public class SaintModelAssembler
         
             saintModel.add( linkTo(
                 methodOn(SaintsController.class )
-                    .createSaintEntity( entity.getSaintReligiousOrder().getId(), entity.getOrderFoundedBySaint() != null, entity ))
+                    .createSaintEntity( entity.getSaintReligiousOrders().get(0).getId(), entity.isOrderFounder(), entity ))
                 .withRel("saveItAgainToDatabaseWithThisPayload"));
 
                 saintModel.setId( entity.getId() );
-                saintModel.setOrderFoundedBySaint( toReligiousOrderModel( entity.getOrderFoundedBySaint() ));
-                saintModel.setSaintIsApostle( entity.isSaintIsApostle() );
-                saintModel.setSaintName( entity.getSaintName() );
+                saintModel.setOrdersFoundedBySaint( toReligiousOrderModel( entity.getOrdersFoundedBySaint() ));
+                saintModel.setCatholicTitle ( entity.getCatholicTitle() );
+                saintModel.setName( entity.getName() );
                 saintModel.setSaintPlaceOfBirth( entity.getSaintPlaceOfBirth() );
-                saintModel.setSaintReligiousOrder( toReligiousOrderModel( entity.getSaintReligiousOrder() ) );
+                saintModel.setSaintReligiousOrders( toReligiousOrderModel( entity.getSaintReligiousOrders() ) );
                 
             return saintModel;
      
@@ -74,7 +75,7 @@ public class SaintModelAssembler
 
         saintModel.add( linkTo(
                 methodOn(ReligiousOrderController.class )
-                    .getReligiousOrderById( entity.getSaintReligiousOrder().getId() ))
+                    .getReligiousOrderById( entity.getSaintReligiousOrders().get(0).getId() ))
                 .withRel( "saint_religious_order" ) );
         
         saintModel.add( linkTo(
@@ -89,11 +90,11 @@ public class SaintModelAssembler
         
         
         saintModel.setId( entity.getId() );
-        saintModel.setOrderFoundedBySaint( toReligiousOrderModel( entity.getOrderFoundedBySaint() ));
-        saintModel.setSaintIsApostle( entity.isSaintIsApostle() );
-        saintModel.setSaintName( entity.getSaintName() );
+        saintModel.setOrdersFoundedBySaint( toReligiousOrderModel( entity.getOrdersFoundedBySaint() ));
+        saintModel.setCatholicTitle( entity.getCatholicTitle() );
+        saintModel.setName( entity.getName() );
         saintModel.setSaintPlaceOfBirth( entity.getSaintPlaceOfBirth() );
-        saintModel.setSaintReligiousOrder( toReligiousOrderModel( entity.getSaintReligiousOrder() ) );
+        saintModel.setSaintReligiousOrders( toReligiousOrderModel( entity.getSaintReligiousOrders() ) );
         saintModel.setOrderFounder( entity.isOrderFounder() );
         saintModel.setSaintFriends( toSaintModel( entity.getFriendSaints() ) );
         
@@ -121,21 +122,24 @@ public class SaintModelAssembler
 		return saintModels;
 	}
 
-    private ReligiousOrderModel toReligiousOrderModel( ReligiousOrderEntity religiousOrderEntity ) {
-        if( religiousOrderEntity == null ){
-            return null;
+    private List<ReligiousOrderModel> toReligiousOrderModel( List<ReligiousOrderEntity> religiousOrderEntities ) {
+        if( religiousOrderEntities.isEmpty() ){
+           new ArrayList<>();
         }
 
-        return ReligiousOrderModel.builder()
-            .id( religiousOrderEntity.getId())
-            .religiousOrderFoundationDate(religiousOrderEntity.getReligiousOrderFoundationDate())
-            .religiousOrderName(religiousOrderEntity.getReligiousOrderName())
-            .countOfSaintsOnOrder( religiousOrderEntity.getSaintsOnOrder().size() )
+        return religiousOrderEntities.stream()
+        .map( order -> ReligiousOrderModel.builder()
+            .id( order.getId())
+            .religiousOrderFoundationDate(order.getReligiousOrderFoundationDate())
+            .religiousOrderName(order.getReligiousOrderName())
+            .countOfSaintsOnOrder( order.getSaintsOnOrder().size() )
             .build()
                 .add( linkTo(
                     methodOn( ReligiousOrderController.class)
-                    .getReligiousOrderById( religiousOrderEntity.getId()))
-                    .withSelfRel());   
+                    .getReligiousOrderById( order.getId()))
+                    .withSelfRel())  )
+        .collect( Collectors.toList());
+         
             
     }
 
@@ -147,15 +151,16 @@ public class SaintModelAssembler
                 .map( saint -> 
                     SaintModel.builder()
                     .id( saint.getId())
-                    .saintName( saint.getSaintName())
+                    .name ( saint.getName())
                     .build()
+                    
                         .add( linkTo(
                             methodOn( SaintsController.class)
                             .getSaintById( saint.getId()))
                             .withSelfRel())
                         .add( linkTo(
                                 methodOn(ReligiousOrderController.class )
-                                    .getReligiousOrderById( saint.getSaintReligiousOrder().getId() ))
+                                    .getReligiousOrderById( saint.getSaintReligiousOrders().get(0).getId() ))
                                 .withRel( "saint_religious_order" ) )
                         
                         .add( linkTo(

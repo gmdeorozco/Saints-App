@@ -1,54 +1,77 @@
 package com.saintsapp.saintsserver.entities;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Entity @Data @AllArgsConstructor @Builder @NoArgsConstructor
-@ToString(exclude = {"saintReligiousOrder","orderFoundedBySaint","friendSaints"})
-public class SaintEntity implements Serializable {
+@Entity @Data @AllArgsConstructor @NoArgsConstructor
+@EqualsAndHashCode(callSuper=false)
+@ToString(exclude = {"saintReligiousOrders","ordersFoundedBySaint","friendSaints"})
+public class SaintEntity extends Human implements Serializable {
     
     @Id @GeneratedValue
     private Long id;
 
-    private String saintName;
     private String saintQuote;
     private String saintPlaceOfBirth;
-    private boolean saintIsApostle;
+    private CatholicTitle catholicTitle;
+
+    private LocalDate canonizationDate;
+    private LocalDate saintFest;
 
     @ManyToOne
-    @JsonIgnore
-    private ReligiousOrderEntity saintReligiousOrder;
+    private Pope canonizedBy;
 
-    @OneToOne( mappedBy = "orderFoundedBy" )
+    @ManyToMany
     @JsonIgnore
-    public ReligiousOrderEntity orderFoundedBySaint;
+    private List<ReligiousOrderEntity> saintReligiousOrders = new ArrayList<ReligiousOrderEntity>();
+
+    @ManyToMany
+    @JsonIgnore
+ 
+    public List<ReligiousOrderEntity> ordersFoundedBySaint = new ArrayList<ReligiousOrderEntity>();
 
    
     @ManyToMany
     @JsonIgnore
-    @Builder.Default
+
     private List<SaintEntity> friendSaints = new ArrayList<SaintEntity>();
 
 
     public boolean isOrderFounder(){
-        return this.getSaintReligiousOrder().getOrderFoundedBy() == this;
+        return ordersFoundedBySaint.size() > 0;
+    }
+
+    @Builder
+    public SaintEntity(Long id, String name, char gender, String saintQuote, String saintPlaceOfBirth,
+            CatholicTitle catholicTitle, LocalDate canonizationDate, LocalDate saintFest, Pope canonizedBy,
+            List<ReligiousOrderEntity> saintReligiousOrders, List<ReligiousOrderEntity> ordersFoundedBySaint,
+            List<SaintEntity> friendSaints) {
+        super(id, name, gender);
+        this.saintQuote = saintQuote;
+        this.saintPlaceOfBirth = saintPlaceOfBirth;
+        this.catholicTitle = catholicTitle;
+        this.canonizationDate = canonizationDate;
+        this.saintFest = saintFest;
+        this.canonizedBy = canonizedBy;
+        this.saintReligiousOrders = saintReligiousOrders;
+        this.ordersFoundedBySaint = ordersFoundedBySaint;
+        this.friendSaints = friendSaints;
     }
 
 

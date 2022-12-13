@@ -48,12 +48,14 @@ public class ReligiousOrderService {
             Optional<ReligiousOrderEntity> opt = religiousOrderRepository.findById(id);
                 opt.ifPresent( rel -> {
 
-                    rel.getOrderFoundedBy().setOrderFoundedBySaint(null);
-                    rel.setOrderFoundedBy(null);
+                    rel.getOrderFoundedBy().stream()
+                        .map( saint -> saint.getOrdersFoundedBySaint().remove(rel) );
+
+                    rel.getOrderFoundedBy().clear();
                     
                     rel.getSaintsOnOrder().stream()
                         .forEach( saint -> {
-                            saint.setSaintReligiousOrder(null);
+                            saint.getSaintReligiousOrders().clear();;
                             saintsRepository.save(saint);
                                     });
         });

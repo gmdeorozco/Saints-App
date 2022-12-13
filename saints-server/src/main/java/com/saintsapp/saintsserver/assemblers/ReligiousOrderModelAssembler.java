@@ -64,7 +64,7 @@ public class ReligiousOrderModelAssembler
            
 
             religiousOrderModel.setId( entity.getId() );
-            religiousOrderModel.setOrderFounder( entity.getOrderFoundedBy()!=null ? saintModelAssembler.toModel( entity.getOrderFoundedBy() ):null );
+            religiousOrderModel.setOrderFounders( toSaintModel(entity.getOrderFoundedBy() ));
             religiousOrderModel.setReligiousOrderFoundationDate( entity.getReligiousOrderFoundationDate());
             religiousOrderModel.setReligiousOrderName( entity.getReligiousOrderName());
             religiousOrderModel.setSaintsOnOrder( toSaintModel(entity.getSaintsOnOrder()));

@@ -41,7 +41,7 @@ public class ReligiousOrderModel extends RepresentationModel < ReligiousOrderMod
     private List<SaintModel> saintsOnOrder;
 
     @JsonView( View.UserView.Order.class )
-    private SaintModel orderFounder;
+    private List<SaintModel> orderFounders;
 
     @JsonView( View.UserView.Order.class )
     private int countOfSaintsOnOrder;

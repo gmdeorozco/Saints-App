@@ -45,10 +45,10 @@ public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orde
     Optional<ReligiousOrderEntity> order = religiousOrderService.getById(orderId);
     order.ifPresent(
         (o) -> {
-                    saint.setSaintReligiousOrder( o );
+                    saint.getSaintReligiousOrders().add( o );
                     if (isFounder) {
-                        saint.setOrderFoundedBySaint( o );
-                        o.setOrderFoundedBy(saint);
+                        saint.getOrdersFoundedBySaint().add( o );
+                        o.getOrderFoundedBy().add( saint );
                     }
                 }
                     );

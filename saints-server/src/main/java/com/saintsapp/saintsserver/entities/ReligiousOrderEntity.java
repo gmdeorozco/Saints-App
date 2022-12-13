@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
@@ -30,14 +31,14 @@ public class ReligiousOrderEntity implements Serializable{
     private LocalDate religiousOrderFoundationDate;
 
    // @JsonIgnore
-    @OneToMany(mappedBy = "saintReligiousOrder")
+    @ManyToMany
     @Builder.Default
     private List<SaintEntity> saintsOnOrder = new ArrayList <SaintEntity>();
 
    // @JsonIgnore
-    @OneToOne
-    @JoinColumn(name = "orderFounderId", referencedColumnName = "id")
-    private SaintEntity orderFoundedBy;
+    @ManyToMany
+    @Builder.Default
+    private List<SaintEntity> orderFoundedBy = new ArrayList <SaintEntity>();
 
     
 

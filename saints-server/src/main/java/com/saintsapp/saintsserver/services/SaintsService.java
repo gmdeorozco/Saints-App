@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.saintsapp.saintsserver.entities.SaintEntity;
@@ -60,15 +59,17 @@ public class SaintsService {
       try{
         Optional< SaintEntity > opt = saintsRepository.findById( id );
             opt.ifPresent( saint -> {
-                if( saint.getOrderFoundedBySaint() != null ){
-                    saint.getOrderFoundedBySaint().setOrderFoundedBy( null );
-                }
-                saint.setOrderFoundedBySaint( null );
-
-                saint.getSaintReligiousOrder().getSaintsOnOrder().remove( saint );
-                saint.setSaintReligiousOrder( null );
                 
+                    saint.getOrdersFoundedBySaint().stream()
+                       .map( order -> order.getOrderFoundedBy().remove(saint));
+                
+                saint.getOrdersFoundedBySaint().clear();
 
+                saint.getSaintReligiousOrders().stream()
+                    .map( order -> order.getSaintsOnOrder().remove( saint ));
+
+                saint.getSaintReligiousOrders().clear();
+                
                 saintsRepository.delete( saint );
             });
         return true;

@@ -47,12 +47,12 @@ public class LoadDatabase {
                         
                         SaintEntity loyolaIgnatius = 
                             SaintEntity.builder()
-                                .saintIsApostle(false)
-                                .saintName("Ignatius of Loyola")
+                              
+                                .name("Ignatius of Loyola")
                                 .saintPlaceOfBirth("Spain")
                                 .saintQuote("Love is shown more in deeds than in words." )
-                                .saintReligiousOrder( jesuitOrder )
-                                .orderFoundedBySaint( jesuitOrder )
+                                .saintReligiousOrders(List.of( jesuitOrder ))
+                                .ordersFoundedBySaint( List.of(jesuitOrder) )
                                 .build();
 
                         loyolaIgnatius = saintsEntityService.saveSaintEntity( loyolaIgnatius );
@@ -63,11 +63,11 @@ public class LoadDatabase {
 
                         SaintEntity francisXavier = 
                             SaintEntity.builder()
-                                .saintIsApostle(false)
-                                .saintName("Francis Xavier")
+                                
+                                .name("Francis Xavier")
                                 .saintPlaceOfBirth("Spain")
                                 .saintQuote("Love is shown more in deeds than in words." )
-                                .saintReligiousOrder( jesuitOrder )
+                                .saintReligiousOrders( List.of( jesuitOrder ) )
                                 .build();
                         francisXavier = saintsEntityService.saveSaintEntity(francisXavier);
 
@@ -76,11 +76,11 @@ public class LoadDatabase {
                              saintsEntityService.addFriend(loyolaIgnatius.getId(), francisXavier.getId());
                      SaintEntity pedroClaver = 
                             SaintEntity.builder()
-                                .saintIsApostle(false)
-                                .saintName("Pedro Claver")
+                                
+                                .name("Pedro Claver")
                                 .saintPlaceOfBirth("Spain")
                                 .saintQuote("Love is shown more in deeds than in words." )
-                                .saintReligiousOrder( jesuitOrder )
+                                .saintReligiousOrders( List.of( jesuitOrder ) )
                                 .build();
                         pedroClaver = saintsEntityService.saveSaintEntity( pedroClaver );
                            
@@ -88,7 +88,7 @@ public class LoadDatabase {
                         
                         saintsEntityService.addFriend(loyolaIgnatius.getId(), pedroClaver.getId());
 
-                        jesuitOrder.setOrderFoundedBy(loyolaIgnatius);
+                        jesuitOrder.getOrderFoundedBy().add(loyolaIgnatius);
                         religiousOrderService.saveReligiousOrderEntity( jesuitOrder );
 
  
