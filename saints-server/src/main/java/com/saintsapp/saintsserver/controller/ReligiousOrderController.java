@@ -2,6 +2,7 @@ package com.saintsapp.saintsserver.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.saintsapp.saintsserver.View;
 import com.saintsapp.saintsserver.assemblers.ReligiousOrderModelAssembler;
 import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
+import com.saintsapp.saintsserver.entities.ReligiousOrdersEntitiesList;
 import com.saintsapp.saintsserver.model.ReligiousOrderModel;
 import com.saintsapp.saintsserver.services.ReligiousOrderService;
 
@@ -48,6 +50,21 @@ public class ReligiousOrderController {
     return new ResponseEntity<ReligiousOrderModel>(
         religiousOrderModelAssembler
             .toModel(religiousOrderService.saveReligiousOrderEntity( order )),HttpStatus.CREATED); 
+               
+    }
+
+    @PostMapping("/api/orders/create/multi")
+    public ResponseEntity<CollectionModel<ReligiousOrderModel>> createReligiousOrderEntities( 
+        @RequestBody ReligiousOrdersEntitiesList orders ){                
+       
+        List<ReligiousOrderEntity> orderEntities =  orders.getReligiousOrderEntities().stream()
+            .map( religiousOrderService :: saveReligiousOrderEntity)
+            .collect( Collectors.toList());
+		
+		return new ResponseEntity<>(
+				religiousOrderModelAssembler.toCollectionModel(orderEntities), 
+				HttpStatus.OK);
+   
                
     }
 

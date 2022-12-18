@@ -2,6 +2,7 @@ package com.saintsapp.saintsserver.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -14,18 +15,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.saintsapp.saintsserver.View;
+import com.saintsapp.saintsserver.assemblers.ReligiousOrderModelAssembler;
 import com.saintsapp.saintsserver.assemblers.SaintModelAssembler;
 import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
+import com.saintsapp.saintsserver.entities.SaintEntitiesList;
 import com.saintsapp.saintsserver.entities.SaintEntity;
+import com.saintsapp.saintsserver.model.ReligiousOrderModel;
 import com.saintsapp.saintsserver.model.SaintModel;
+import com.saintsapp.saintsserver.repository.SaintsRepository;
 import com.saintsapp.saintsserver.services.ReligiousOrderService;
 import com.saintsapp.saintsserver.services.SaintsService;
 
 @RestController
+@RequestMapping("/api")
 public class SaintsController {
     
 @Autowired
@@ -37,7 +42,20 @@ ReligiousOrderService religiousOrderService;
 @Autowired
 SaintModelAssembler saintModelAssembler;
 
-@PostMapping("/api/saints/create/{orderId}/{isFounder}")
+@Autowired
+ReligiousOrderModelAssembler religiousOrderModelAssembler;
+
+@PostMapping("saints/create/multi")
+public ResponseEntity<CollectionModel<SaintModel>> createSaintEntities ( @RequestBody SaintEntitiesList entities){
+    List<SaintEntity> saving = entities.getSaints().stream()
+        .map( saintsService::saveSaintEntity )
+        .collect( Collectors.toList() );
+
+    return ResponseEntity.ok(saintModelAssembler.toCollectionModel(saving));
+       
+}
+
+@PostMapping("saints/create/{orderId}/{isFounder}")
 public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orderId" ) Long orderId, 
     @PathVariable(value = "isFounder") boolean isFounder, 
     @RequestBody SaintEntity saint){                
@@ -45,10 +63,10 @@ public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orde
     Optional<ReligiousOrderEntity> order = religiousOrderService.getById(orderId);
     order.ifPresent(
         (o) -> {
-                    saint.setSaintReligiousOrder( o );
+                    saint.getSaintReligiousOrders().add( o );
                     if (isFounder) {
-                        saint.setOrderFoundedBySaint( o );
-                        o.setOrderFoundedBy(saint);
+                        saint.getOrdersFoundedBySaint().add( o );
+                        o.getOrderFoundedBy().add( saint );
                     }
                 }
                     );
@@ -58,7 +76,7 @@ public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orde
                
     }
 
-    @GetMapping("/api/saints/{id}/friends")
+    @GetMapping("saints/{id}/friends")
     public ResponseEntity<CollectionModel<SaintModel>> getSaintFriends(@PathVariable(value = "id") Long id){
         List<SaintEntity> friends = saintsService.getFriendSaints(id); 
         return new ResponseEntity<>(
@@ -66,7 +84,15 @@ public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orde
                 HttpStatus.OK);
     }
 
-    @PutMapping("/api/saints/create")
+    @GetMapping("saints/{id}/orders")
+    public ResponseEntity<CollectionModel<ReligiousOrderModel>> getSaintOrders(@PathVariable(value = "id") Long id){
+        List<ReligiousOrderEntity> orders = saintsService.getSaintsOrders(id); 
+        return new ResponseEntity<>(
+                religiousOrderModelAssembler.toCollectionModelSaintOrders( id, orders ),
+                HttpStatus.OK);
+    }
+
+    @PutMapping("saints/create")
     public ResponseEntity<SaintModel> updateSaintEntity( @RequestBody SaintEntity saint ){                
            
     return new ResponseEntity<SaintModel>(
@@ -74,7 +100,7 @@ public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orde
                
     }
 
-    @DeleteMapping("/api/saints/{id}/delete")
+    @DeleteMapping("saints/{id}/delete")
     public ResponseEntity<SaintModel> deleteSaintEntity( @PathVariable( value = "id" ) Long id ){    
         
         ResponseEntity<SaintModel> sm = saintsService.getById(id)
@@ -87,7 +113,7 @@ public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orde
            
     }
 
-    @GetMapping("/api/saints/{id}")
+    @GetMapping("saints/{id}")
 	public ResponseEntity<SaintModel> getSaintById( @PathVariable("id") Long id ) 
 	{
 		return saintsService.getById( id ) 
@@ -96,7 +122,7 @@ public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orde
 				.orElse( ResponseEntity.notFound().build() ) ;
 	}
 
-    @GetMapping("/api/saints-list")
+    @GetMapping("saints-list")
 	public ResponseEntity<CollectionModel<SaintModel>> getAllSaints(Pageable pageable) 
 	{
 		List<SaintEntity> orderEntities = saintsService.getAllSaintEntities();
@@ -106,7 +132,7 @@ public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orde
                 HttpStatus.OK);
 	}
 
-    @GetMapping("/api/saints")
+    @GetMapping("saints")
 	public ResponseEntity<CollectionModel<SaintModel>> getAllSaints() 
 	{
 		List<SaintEntity> actorEntities = (List<SaintEntity>) saintsService.getAllSaintEntities();
@@ -116,7 +142,7 @@ public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orde
 				HttpStatus.OK);
 	}
 
-    @PutMapping("/api/saints/addfriends/{id1}/{id2}")
+    @PutMapping("saints/addfriends/{id1}/{id2}")
     public ResponseEntity<SaintModel> addFriend( @PathVariable( value = "id1") Long saintId1,
                                                     @PathVariable( value = "id2")  Long saintId2 ){
          return 

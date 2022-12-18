@@ -1,5 +1,6 @@
 package com.saintsapp.saintsserver.model;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.hateoas.RepresentationModel;
@@ -7,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.saintsapp.saintsserver.View;
+import com.saintsapp.saintsserver.entities.CatholicTitle;
+import com.saintsapp.saintsserver.entities.Pope;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +28,7 @@ public class SaintModel extends RepresentationModel < SaintModel > {
     private Long id;
 
     @JsonView( View.UserView.Order.class )
-    private String saintName;
+    private String name;
 
     @JsonView( View.UserView.Order.class )
     private String saintQuote;
@@ -34,13 +37,22 @@ public class SaintModel extends RepresentationModel < SaintModel > {
     private String saintPlaceOfBirth;
 
     @JsonView( View.UserView.Order.class )
-    private boolean saintIsApostle;
+    private CatholicTitle catholicTitle;
+
+    @JsonView( View.UserView.Order.class )
+    private LocalDate canonizationDate;
+
+    @JsonView( View.UserView.Order.class )
+    private LocalDate saintFest;
+
+    @JsonView( View.UserView.Order.class )
+    private Pope canonizedBy;
 
     @JsonView( View.UserView.Saint.class )
-    private ReligiousOrderModel saintReligiousOrder;
+    private List<ReligiousOrderModel> saintReligiousOrders;
 
     @JsonView( View.UserView.Saint.class )
-    private ReligiousOrderModel orderFoundedBySaint;
+    private List<ReligiousOrderModel> ordersFoundedBySaint;
 
     @JsonView( View.UserView.Order.class )
     private boolean isOrderFounder;
