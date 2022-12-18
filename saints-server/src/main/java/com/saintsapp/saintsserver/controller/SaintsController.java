@@ -2,6 +2,7 @@ package com.saintsapp.saintsserver.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -20,9 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.saintsapp.saintsserver.assemblers.ReligiousOrderModelAssembler;
 import com.saintsapp.saintsserver.assemblers.SaintModelAssembler;
 import com.saintsapp.saintsserver.entities.ReligiousOrderEntity;
+import com.saintsapp.saintsserver.entities.SaintEntitiesList;
 import com.saintsapp.saintsserver.entities.SaintEntity;
 import com.saintsapp.saintsserver.model.ReligiousOrderModel;
 import com.saintsapp.saintsserver.model.SaintModel;
+import com.saintsapp.saintsserver.repository.SaintsRepository;
 import com.saintsapp.saintsserver.services.ReligiousOrderService;
 import com.saintsapp.saintsserver.services.SaintsService;
 
@@ -41,6 +44,16 @@ SaintModelAssembler saintModelAssembler;
 
 @Autowired
 ReligiousOrderModelAssembler religiousOrderModelAssembler;
+
+@PostMapping("saints/create/multi")
+public ResponseEntity<CollectionModel<SaintModel>> createSaintEntities ( @RequestBody SaintEntitiesList entities){
+    List<SaintEntity> saving = entities.getSaints().stream()
+        .map( saintsService::saveSaintEntity )
+        .collect( Collectors.toList() );
+
+    return ResponseEntity.ok(saintModelAssembler.toCollectionModel(saving));
+       
+}
 
 @PostMapping("saints/create/{orderId}/{isFounder}")
 public ResponseEntity<SaintModel> createSaintEntity( @PathVariable(value = "orderId" ) Long orderId, 

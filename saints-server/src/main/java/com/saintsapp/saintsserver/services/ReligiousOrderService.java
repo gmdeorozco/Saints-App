@@ -55,7 +55,7 @@ public class ReligiousOrderService {
                     
                     rel.getSaintsOnOrder().stream()
                         .forEach( saint -> {
-                            saint.getSaintReligiousOrders().clear();;
+                            saint.getSaintReligiousOrders().clear();
                             saintsRepository.save(saint);
                                     });
         });

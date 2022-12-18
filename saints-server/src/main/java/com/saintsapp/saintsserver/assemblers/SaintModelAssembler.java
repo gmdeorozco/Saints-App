@@ -42,11 +42,13 @@ public class SaintModelAssembler
         SaintModel saintModel = instantiateModel( entity );
 
        
-        
-            saintModel.add( linkTo(
+            if( entity.getSaintReligiousOrders().size() > 0){
+                saintModel.add( linkTo(
                 methodOn(SaintsController.class )
                     .createSaintEntity( entity.getSaintReligiousOrders().get(0).getId(), entity.isOrderFounder(), entity ))
                 .withRel("saveItAgainToDatabaseWithThisPayload"));
+            }
+            
 
                 saintModel.setId( entity.getId() );
                 saintModel.setOrdersFoundedBySaint( toReligiousOrderModel( entity.getOrdersFoundedBySaint() ));
@@ -76,10 +78,13 @@ public class SaintModelAssembler
                 .getSaintById( entity.getId()))
             .withSelfRel());
 
+            if( entity.getSaintReligiousOrders().size() > 0){
         saintModel.add( linkTo(
                 methodOn(ReligiousOrderController.class )
                     .getReligiousOrderById( entity.getSaintReligiousOrders().get(0).getId() ))
+            
                 .withRel( "saint_religious_order" ) );
+            }
         
         saintModel.add( linkTo(
             methodOn(SaintsController.class )
@@ -168,10 +173,10 @@ public class SaintModelAssembler
                             methodOn( SaintsController.class)
                             .getSaintById( saint.getId()))
                             .withSelfRel())
-                        .add( linkTo(
+                        /* .add( linkTo(
                                 methodOn(ReligiousOrderController.class )
                                     .getReligiousOrderById( saint.getSaintReligiousOrders().get(0).getId() ))
-                                .withRel( "saint_religious_order" ) )
+                                .withRel( "saint_religious_order" ) )*/
                         
                         .add( linkTo(
                             methodOn(SaintsController.class )
